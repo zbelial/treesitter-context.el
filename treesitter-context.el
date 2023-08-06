@@ -107,7 +107,7 @@ If nil, show context only when the outmost parent is invisible."
                           :background-color background-color
                           :internal-border-color "orange"
                           :internal-border-width 1
-                          :min-width treesitter-context-frame-min-width
+                          :min-width (min (max treesitter-context-frame-min-width (/ (window-width) 2)) (window-width))
                           :accept-focus nil
                           :timeout treesitter-context-frame-autohide-timeout)))
   nil)
