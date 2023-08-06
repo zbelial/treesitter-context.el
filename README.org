@@ -8,6 +8,14 @@
   A minor mode shows context in a child-frame. You need Emacs 29.1 to run it, as treesit-context use the builtin treesit.
 
   It depends on [[https://github.com/zbelial/posframe-plus][posframe-plus]].
+  
+* Languages supported
+  - c
+  - cpp
+  - java
+  - rust
+  - python
+  - go
 
 * CAUTION
   For some languages, such as go and java, treesit-context cannot capture the "else" branch of the "if statement", so if the cursor in an "else" block, treesit-context will display the "if" branch information.
