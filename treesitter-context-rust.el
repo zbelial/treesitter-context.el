@@ -28,6 +28,15 @@
   "Collect all of current node's parent nodes."
   (treesitter-context-collect-contexts-base treesitter-context--rust-node-types treesitter-context--rust-query rust-ts-mode-indent-offset))
 
+(cl-defmethod treesitter-context-indent-context (node context indent-level indent-offset &context (major-mode rust-ts-mode))
+  (let ((node-type (treesit-node-type node)))
+    (if (member node-type '("else_clause"))
+        (progn
+          (setq treesitter-context--indent-level (- indent-level 1))
+          (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))
+      (setq treesitter-context--indent-level indent-level)
+      (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
+
 (add-to-list 'treesitter-context--supported-mode 'rust-ts-mode t)
 
 (provide 'treesitter-context-rust)

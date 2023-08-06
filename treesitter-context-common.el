@@ -74,7 +74,6 @@ Each node is indented according to INDENT-OFFSET."
   (let* ((node (treesit-node-at (point)))
          (parents (treesitter-context--parent-nodes node-types))
          (root (nth 0 parents))
-         (indent-level 0)
          root-start
          groups
          node-pairs
@@ -82,6 +81,7 @@ Each node is indented according to INDENT-OFFSET."
          contexts)
     ;; (message "parents: %s" parents)
     (when root
+      (setq treesitter-context--indent-level 0)
       (setq root-start (treesit-node-start root))
       (when (or treesitter-context-show-context-always
                 (> (window-start) root-start))
@@ -104,12 +104,15 @@ Each node is indented according to INDENT-OFFSET."
                   (if context.end
                       (setq end-pos (treesit-node-start context.end))
                     (setq end-pos (treesit-node-end context)))
-                  (cl-pushnew (treesitter-context--indent-context (buffer-substring start-pos end-pos) indent-level indent-offset) contexts)
-                  (setq indent-level (1+ indent-level)))))))))
+                  (cl-pushnew (treesitter-context-indent-context context (buffer-substring start-pos end-pos) treesitter-context--indent-level indent-offset) contexts)
+                  (setq treesitter-context--indent-level (1+ treesitter-context--indent-level)))))))))
     (nreverse contexts)))
 
 (cl-defgeneric treesitter-context-collect-contexts ()
   "Collect all of current node's parent nodes."
   (user-error "%s is not supported by treesitter-context." major-mode))
+
+(cl-defgeneric treesitter-context-indent-context (node context indent-level indent-offset)
+  (treesitter-context--indent-context context indent-level indent-offset))
 
 (provide 'treesitter-context-common)

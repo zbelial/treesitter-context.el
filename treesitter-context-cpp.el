@@ -30,6 +30,15 @@
   "Collect all of current node's parent nodes."
   (treesitter-context-collect-contexts-base treesitter-context--c++-node-types treesitter-context--c++-query c-ts-mode-indent-offset))
 
+(cl-defmethod treesitter-context-indent-context (node context indent-level indent-offset &context (major-mode c++-ts-mode))
+  (let ((node-type (treesit-node-type node)))
+    (if (member node-type '("elif_clause" "else_clause"))
+        (progn
+          (setq treesitter-context--indent-level (- indent-level 1))
+          (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))
+      (setq treesitter-context--indent-level indent-level)
+      (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
+
 (add-to-list 'treesitter-context--supported-mode 'c++-ts-mode t)
 
 (provide 'treesitter-context-cpp)

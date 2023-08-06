@@ -76,6 +76,9 @@ If nil, show context only when the outmost parent is invisible."
 (defvar treesitter-context--buffer-name "*treesitter-context*"
   "Name of buffer used to show context.")
 
+(defvar treesitter-context--indent-level 0
+  "Indent level used to generate context information.")
+
 (defvar-local treesitter-context--refresh-timer nil
   "Idle timer for refreshing context.")
 
