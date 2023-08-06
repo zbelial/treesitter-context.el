@@ -1,11 +1,11 @@
-;;; treesit-context-c.el --- Show context information around current point -*- lexical-binding: t; -*-
+;;; treesitter-context-c.el --- Show context information around current point -*- lexical-binding: t; -*-
 
-(require 'treesit-context-common)
+(require 'treesitter-context-common)
 
-(defconst treesit-context--c++-node-types '("preproc_if" "preproc_ifdef" "function_definition" "for_statement" "if_statement" "else_clause" "while_statement" "do_statement" "struct_specifier" "enum_specifier" "for_range_loop" "class_specifier" "linkage_specification" "switch_statement" "case_statement")
+(defconst treesitter-context--c++-node-types '("preproc_if" "preproc_ifdef" "function_definition" "for_statement" "if_statement" "else_clause" "while_statement" "do_statement" "struct_specifier" "enum_specifier" "for_range_loop" "class_specifier" "linkage_specification" "switch_statement" "case_statement")
   "Node types should be showed.")
 
-(defconst treesit-context--c++-query
+(defconst treesitter-context--c++-query
   '(
     (preproc_if (_) (_) @context.end) @context
     (preproc_ifdef name: (identifier) (_) @context.end) @context
@@ -26,10 +26,10 @@
     )
   "Query patterns to capture desired nodes.")
 
-(cl-defmethod treesit-context-collect-contexts (&context (major-mode c++-ts-mode))
+(cl-defmethod treesitter-context-collect-contexts (&context (major-mode c++-ts-mode))
   "Collect all of current node's parent nodes."
-  (treesit-context-collect-contexts-base treesit-context--c++-node-types treesit-context--c++-query c-ts-mode-indent-offset))
+  (treesitter-context-collect-contexts-base treesitter-context--c++-node-types treesitter-context--c++-query c-ts-mode-indent-offset))
 
-(add-to-list 'treesit-context--supported-mode 'c++-ts-mode t)
+(add-to-list 'treesitter-context--supported-mode 'c++-ts-mode t)
 
-(provide 'treesit-context-cpp)
+(provide 'treesitter-context-cpp)

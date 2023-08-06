@@ -1,11 +1,11 @@
-;;; treesit-context-rust.el --- Show context information around current point -*- lexical-binding: t; -*-
+;;; treesitter-context-rust.el --- Show context information around current point -*- lexical-binding: t; -*-
 
-(require 'treesit-context-common)
+(require 'treesitter-context-common)
 
-(defconst treesit-context--rust-node-types '("if_expression" "else_clause" "match_expression" "for_expression" "while_expression" "loop_expression" "closure_expression" "function_item" "impl_item" "trait_item" "struct_item" "enum_item" "mod_item")
+(defconst treesitter-context--rust-node-types '("if_expression" "else_clause" "match_expression" "for_expression" "while_expression" "loop_expression" "closure_expression" "function_item" "impl_item" "trait_item" "struct_item" "enum_item" "mod_item")
   "Node types should be showed.")
 
-(defconst treesit-context--rust-query
+(defconst treesitter-context--rust-query
   '(
     (if_expression consequence: (_) @context.end) @context
     (else_clause (block (_)) @context.end) @context
@@ -24,10 +24,10 @@
     )
   "Query patterns to capture desired nodes.")
 
-(cl-defmethod treesit-context-collect-contexts (&context (major-mode rust-ts-mode))
+(cl-defmethod treesitter-context-collect-contexts (&context (major-mode rust-ts-mode))
   "Collect all of current node's parent nodes."
-  (treesit-context-collect-contexts-base treesit-context--rust-node-types treesit-context--rust-query rust-ts-mode-indent-offset))
+  (treesitter-context-collect-contexts-base treesitter-context--rust-node-types treesitter-context--rust-query rust-ts-mode-indent-offset))
 
-(add-to-list 'treesit-context--supported-mode 'rust-ts-mode t)
+(add-to-list 'treesitter-context--supported-mode 'rust-ts-mode t)
 
-(provide 'treesit-context-rust)
+(provide 'treesitter-context-rust)

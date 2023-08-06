@@ -1,11 +1,11 @@
-;;; treesit-context-common.el --- Show context information around current point -*- lexical-binding: t; -*-
+;;; treesitter-context-common.el --- Show context information around current point -*- lexical-binding: t; -*-
 
 (require 'treesit)
 (require 'cl-generic)
 (require 'cl-lib)
 (require 'seq)
 
-(defun treesit-context--color-blend (c1 c2 alpha)
+(defun treesitter-context--color-blend (c1 c2 alpha)
   "Blend two colors C1 and C2 with ALPHA. C1 and C2 are hexidecimal strings.
 ALPHA is a number between 0.0 and 1.0 which corresponds to the influence of C1 on the result."
   (apply #'(lambda (r g b)
@@ -18,10 +18,10 @@ ALPHA is a number between 0.0 and 1.0 which corresponds to the influence of C1 o
             (round (+ (* x alpha) (* y (- 1 alpha)))))
           (color-values c1) (color-values c2))))
 
-(defun treesit-context--parent-nodes (node-types)
+(defun treesitter-context--parent-nodes (node-types)
   "Get the parent nodes whose node type is in NODE-TYPES."
   (unless (or (minibufferp)
-              (equal (buffer-name) treesit-context--buffer-name))
+              (equal (buffer-name) treesitter-context--buffer-name))
     (ignore-errors
       (let ((node (treesit-node-at (point)))
             node-type parents)
@@ -32,7 +32,7 @@ ALPHA is a number between 0.0 and 1.0 which corresponds to the influence of C1 o
           (setq node (treesit-node-parent node)))
         parents))))
 
-(defun treesit-context--capture (node query &optional beg end node-only)
+(defun treesitter-context--capture (node query &optional beg end node-only)
   "Capture nodes and return them as a pair.
 The car of the pair is context, and the cdr is context.end."
   (let (captures
@@ -59,7 +59,7 @@ The car of the pair is context, and the cdr is context.end."
       (setq result (nreverse result)))
     result))
 
-(defun treesit-context--indent-context (context level offset)
+(defun treesitter-context--indent-context (context level offset)
   (let ((lines (string-split context "\n" t))
         (indentation (make-string (* level offset) ?\s))
         (result ""))
@@ -67,12 +67,12 @@ The car of the pair is context, and the cdr is context.end."
       (setq result (concat result indentation (string-trim line) "\n")))
     (string-trim-right result)))
 
-(defun treesit-context-collect-contexts-base (node-types query-patterns indent-offset)
+(defun treesitter-context-collect-contexts-base (node-types query-patterns indent-offset)
   "Collect all of current node's parent nodes with node-type in NODE-TYPES.
 Use QUERY-PATTERNS to capture potential nodes.
 Each node is indented according to INDENT-OFFSET."
   (let* ((node (treesit-node-at (point)))
-         (parents (treesit-context--parent-nodes node-types))
+         (parents (treesitter-context--parent-nodes node-types))
          (root (nth 0 parents))
          (indent-level 0)
          root-start
@@ -83,9 +83,9 @@ Each node is indented according to INDENT-OFFSET."
     ;; (message "parents: %s" parents)
     (when root
       (setq root-start (treesit-node-start root))
-      (when (or treesit-context-show-context-always
+      (when (or treesitter-context-show-context-always
                 (> (window-start) root-start))
-        (setq groups (treesit-context--capture root query-patterns (treesit-node-start root) (point)))
+        (setq groups (treesitter-context--capture root query-patterns (treesit-node-start root) (point)))
         ;; (message "captures2: %s" groups)
         (when groups
           (setq node-pairs (seq-filter (lambda (group) (member (cdr (nth 0 group)) parents)) groups))
@@ -104,12 +104,12 @@ Each node is indented according to INDENT-OFFSET."
                   (if context.end
                       (setq end-pos (treesit-node-start context.end))
                     (setq end-pos (treesit-node-end context)))
-                  (cl-pushnew (treesit-context--indent-context (buffer-substring start-pos end-pos) indent-level indent-offset) contexts)
+                  (cl-pushnew (treesitter-context--indent-context (buffer-substring start-pos end-pos) indent-level indent-offset) contexts)
                   (setq indent-level (1+ indent-level)))))))))
     (nreverse contexts)))
 
-(cl-defgeneric treesit-context-collect-contexts ()
+(cl-defgeneric treesitter-context-collect-contexts ()
   "Collect all of current node's parent nodes."
-  (user-error "%s is not supported by treesit-context." major-mode))
+  (user-error "%s is not supported by treesitter-context." major-mode))
 
-(provide 'treesit-context-common)
+(provide 'treesitter-context-common)
