@@ -40,19 +40,26 @@ The car of the pair is context, and the cdr is context.end."
         total
         result
         first
-        second)
+        second
+        third)
     (setq captures (treesit-query-capture node query (treesit-node-start node) (point)))
     ;; (message "captures: %s" captures)
     (cl-dolist (c captures)
-      ;; (message "capture: %s" c)
+      ;; (message "capture: %s, node-type: %s" c (treesit-node-type (cdr c)))
       )
     (when captures
       (setq index 0)
       (setq total (length captures))
       (while (< index total)
         (setq first (nth index captures)
-              second (nth (1+ index) captures))
+              second (nth (1+ index) captures)
+              third (nth (+ index 2) captures))
         (cond
+         ((and (eq (car first) 'context)
+               (eq (car second) 'context.real)
+               (eq (car third) 'context.end))
+          (cl-pushnew (list first second third) result)
+          (setq index (+ index 3)))
          ((and (eq (car first) 'context)
                (eq (car second) 'context.end))
           (cl-pushnew (list first second) result)
@@ -103,19 +110,35 @@ Each node is indented according to INDENT-OFFSET."
           ;; (message "node-pairs: %s" node-pairs)
           (when node-pairs
             (let (context
+                  context.real
                   context.end
+                  len
                   start-pos
                   end-pos)
               (save-excursion
                 (widen)
                 (cl-dolist (np node-pairs)
-                  (setq context (cdr (nth 0 np))
-                        context.end (cdr (nth 1 np))
-                        start-pos (treesit-node-start context))
-                  (if context.end
-                      (setq end-pos (treesit-node-start context.end))
-                    (setq end-pos (treesit-node-end context)))
-                  (cl-pushnew (treesitter-context-indent-context context (buffer-substring start-pos end-pos) treesitter-context--indent-level indent-offset) contexts)
+                  (setq len (length np))
+                  (cond
+                   ((= len 1)
+                    (setq context (cdr (nth 0 np)))
+                    (setq start-pos (treesit-node-start context)
+                          end-pos (treesit-node-end context))
+                    (cl-pushnew (treesitter-context-indent-context context (buffer-substring start-pos end-pos) treesitter-context--indent-level indent-offset) contexts))
+                   ((= len 2)
+                    (setq context (cdr (nth 0 np))
+                          context.end (cdr (nth 1 np)))
+                    (setq start-pos (treesit-node-start context)
+                          end-pos (treesit-node-start context.end))
+                    (cl-pushnew (treesitter-context-indent-context context (buffer-substring start-pos end-pos) treesitter-context--indent-level indent-offset) contexts))
+                   ((= len 3)
+                    (setq context (cdr (nth 0 np))
+                          context.real (cdr (nth 1 np))
+                          context.end (cdr (nth 2 np)))
+                    (setq start-pos (treesit-node-start context.real)
+                          end-pos (treesit-node-start context.end))
+                    (cl-pushnew (treesitter-context-indent-context context.real (buffer-substring start-pos end-pos) treesitter-context--indent-level indent-offset) contexts)))
+                  ;; (cl-pushnew (treesitter-context-indent-context context (buffer-substring start-pos end-pos) treesitter-context--indent-level indent-offset) contexts)
                   (setq treesitter-context--indent-level (1+ treesitter-context--indent-level)))))))))
     (nreverse contexts)))
 
