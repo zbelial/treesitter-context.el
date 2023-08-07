@@ -142,7 +142,7 @@ If nil, show context only when the outmost parent is invisible."
             (progn
               (add-hook 'post-command-hook #'treesitter-context--refresh-when-idle nil t)
               (add-hook 'buffer-list-update-hook #'treesitter-context--hide-frame nil t)
-              )
+              (treesitter-context--refresh-context))
           (setq treesitter-context-mode nil)))
     (when treesitter-context--refresh-timer
       (cancel-timer treesitter-context--refresh-timer)
