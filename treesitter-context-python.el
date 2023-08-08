@@ -26,7 +26,7 @@
 
 (cl-defmethod treesitter-context-indent-context (node context indent-level indent-offset &context (major-mode python-ts-mode))
   (let ((node-type (treesit-node-type node)))
-    (if (member node-type '("elif_clause" "else_clause"))
+    (if (member node-type '("elif_clause" "else_clause" "except_clause"))
         (progn
           (setq treesitter-context--indent-level (- indent-level 1))
           (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))
