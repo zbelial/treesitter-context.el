@@ -18,7 +18,8 @@
   - go
 
 * How to install and use
-  Clone this repo, add the path to `load-path`, then enable `treesitter-context-mode`. Be sure your Emacs version is 29.1 and above (built with tree-sitter support), and install the tree-sitter parsers you need.
+  Clone this repo, add the path to `load-path`, then enable `treesitter-context-mode` in a buffer or add it to the <lang>-ts-mode-hook, where <lang> is a language this package supports.
+  Be sure your Emacs version is 29.1 and above (built with tree-sitter support), and install the tree-sitter parsers you need.
 
 * CAUTION
   - +For some languages, such as go and java, treesitter-context cannot capture the "else" branch of the "if statement", so if the cursor in an "else" block, treesitter-context will display the "if" branch information.+
