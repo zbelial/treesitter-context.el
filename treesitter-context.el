@@ -70,6 +70,13 @@ If nil, show context only when the outmost parent is invisible."
   :safe 'integerp
   :group 'treesitter-context)
 
+(defcustom treesitter-context-frame-min-height 5
+  "Minimal height of the child frame."
+  :version "29.1"
+  :type 'integer
+  :safe 'integerp
+  :group 'treesitter-context)
+
 (defvar treesitter-context--supported-mode nil
   "Major modes that are support by treesitter-context.")
 
@@ -108,6 +115,7 @@ If nil, show context only when the outmost parent is invisible."
                           :internal-border-color "orange"
                           :internal-border-width 1
                           :min-width (min (max treesitter-context-frame-min-width (/ (window-width) 2)) (window-width))
+                          :min-height treesitter-context-frame-min-height
                           :accept-focus nil
                           :timeout treesitter-context-frame-autohide-timeout)))
   nil)
