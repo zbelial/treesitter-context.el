@@ -20,8 +20,7 @@
     (case_statement value: (identifier) :anchor (_) @context.end) @context
     (case_statement !value (_) @context.end) @context
     (struct_specifier body: (_) @context.end) @context
-    (enum_specifier body: (_) @context.end) @context    
-    )
+    (enum_specifier body: (_) @context.end) @context)
   "Query patterns to capture desired nodes.")
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode c-ts-mode))
