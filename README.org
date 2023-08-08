@@ -18,7 +18,11 @@
   - go
 
 * How to install and use
-  Clone this repo, add the path to `load-path`, then enable `treesitter-context-mode` in a buffer or add it to the <lang>-ts-mode-hook, where <lang> is a language this package supports.
+  Clone this repo, add the path to `load-path`, then enable `treesitter-context-mode` in a buffer or add it to the <lang>-ts-mode-hook, where <lang> is a language this package supports. Like
+  #+BEGIN_SRC elisp 
+    (add-hook 'rust-ts-mode-hook #'treesitter-context-mode)
+  #+END_SRC
+
   Be sure your Emacs version is 29.1 and above (built with tree-sitter support), and install the tree-sitter parsers you need.
 
 * CAUTION
