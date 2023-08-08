@@ -17,8 +17,26 @@
   - python
   - go
 
+* How to install and use
+  Clone this repo, add the path to `load-path`, then enable `treesitter-context-mode`. Be sure your Emacs version is 29.1 and above (built with tree-sitter support), and install the tree-sitter parsers you need.
+
 * CAUTION
-  For some languages, such as go and java, treesitter-context cannot capture the "else" branch of the "if statement", so if the cursor in an "else" block, treesitter-context will display the "if" branch information.
+  - +For some languages, such as go and java, treesitter-context cannot capture the "else" branch of the "if statement", so if the cursor in an "else" block, treesitter-context will display the "if" branch information.+
+    Fixed now.
+  - 
+
+* How to contribute
+  If you want to add support for another language <lang>, here is a guide.
+
+  1. Create a file, treesitter-context-<lang>.el. All of the following is in this file.
+  2. Add `treesitter-context--<lang>-node-types`, this is the node types you are interested.
+  3. Add `treesitter-context--<lang>-query`, the query patterns used to query nodes. See more information from [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Pattern-Matching.html][Emacs Manual]].
+  4. Implement `treesitter-context-collect-contexts`, current mojar mode specific method to collect context
+  5. (Optional) Implement `treesitter-context-indent-context`. At the moment, this function is used to indent *else* , make sure the *else* has the same indentation with the previous *if*.
+  6. `(add-to-list 'treesitter-context--supported-mode '<lang>-ts-mode t)`, so treesitter-context knows that this language is supported.
+
+* License
+  GPLv3
   
 * Some images
   [[file:images/go.png]]
