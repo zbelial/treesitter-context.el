@@ -2,7 +2,7 @@
 
 (require 'treesitter-context-common)
 
-(defconst treesitter-context--python-node-types '("class_definition" "function_definition" "try_statement" "with_statement" "if_statement" "elif_clause" "else_clause" "case_clause" "while_statement" "except_clause" "match_statement")
+(defconst treesitter-context--python-node-types '("class_definition" "function_definition" "try_statement" "with_statement" "if_statement" "elif_clause" "else_clause" "case_clause" "while_statement" "except_clause" "match_statement" "for_statement")
   "Node types should be showed.")
 
 (defconst treesitter-context--python-query
@@ -11,6 +11,7 @@
     (function_definition body: (_) @context.end) @context
     (try_statement body: (_) @context.end) @context
     (with_statement body: (_) @context.end) @context
+    (for_statement body: (_) @context.end) @context
     (if_statement consequence: (_) @context.end) @context
     (elif_clause consequence: (_) @context.end) @context
     (else_clause body: (_) @context.end) @context
