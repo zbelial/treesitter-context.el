@@ -93,31 +93,30 @@ If nil, show context only when the outmost parent is invisible."
   "A list storing context. The outmost one is at the front.")
 
 (defun treesitter-context--show-context ()
-  ""
-  (when treesitter-context--context-list
-    (let* ((buffer (get-buffer-create treesitter-context--buffer-name))
-           (contexts treesitter-context--context-list)
-           (bg-mode (frame-parameter nil 'background-mode))
-           (background-color
-            (cond ((eq bg-mode 'dark)
-                   (treesitter-context--color-blend (face-background 'default) "#000000" 0.1))
-                  ((eq bg-mode 'light)
-                   (treesitter-context--color-blend (face-background 'default) "#000000" 0.8)))))
-      (with-current-buffer buffer
-        (erase-buffer)
-        (goto-char (point-min))
-        (cl-dolist (text contexts)
-          (insert text "\n")))
-      (posframe-plus-show buffer t treesitter-context-hide-frame-after-move
-                          :poshandler #'posframe-poshandler-window-top-right-corner
-                          :border-width 1
-                          :background-color background-color
-                          :internal-border-color "orange"
-                          :internal-border-width 1
-                          :min-width (min (max treesitter-context-frame-min-width (/ (window-width) 2)) (window-width))
-                          :min-height treesitter-context-frame-min-height
-                          :accept-focus nil
-                          :timeout treesitter-context-frame-autohide-timeout)))
+  "Show context in a child frame."
+  (let* ((buffer (get-buffer-create treesitter-context--buffer-name))
+         (contexts treesitter-context--context-list)
+         (bg-mode (frame-parameter nil 'background-mode))
+         (background-color
+          (cond ((eq bg-mode 'dark)
+                 (treesitter-context--color-blend (face-background 'default) "#000000" 0.1))
+                ((eq bg-mode 'light)
+                 (treesitter-context--color-blend (face-background 'default) "#000000" 0.8)))))
+    (with-current-buffer buffer
+      (erase-buffer)
+      (goto-char (point-min))
+      (cl-dolist (text contexts)
+        (insert text "\n")))
+    (posframe-plus-show buffer t treesitter-context-hide-frame-after-move
+                        :poshandler #'posframe-poshandler-window-top-right-corner
+                        :border-width 1
+                        :background-color background-color
+                        :internal-border-color "orange"
+                        :internal-border-width 1
+                        :min-width (min (max treesitter-context-frame-min-width (/ (window-width) 2)) (window-width))
+                        :min-height treesitter-context-frame-min-height
+                        :accept-focus nil
+                        :timeout treesitter-context-frame-autohide-timeout))
   nil)
 
 (defun treesitter-context--refresh-context ()
