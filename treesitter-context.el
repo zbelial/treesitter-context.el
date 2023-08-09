@@ -166,5 +166,6 @@ If nil, show context only when the outmost parent is invisible."
 (require 'treesitter-context-rust)
 (require 'treesitter-context-go)
 (require 'treesitter-context-json)
+(require 'treesitter-context-javascript)
 
 (provide 'treesitter-context)
