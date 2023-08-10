@@ -50,12 +50,6 @@ If nil, show context only when the outmost parent is invisible."
   :type 'boolean
   :group 'treesitter-context)
 
-(defcustom treesitter-context-hide-frame-after-move t
-  "If t, hide the child-frame after moving cursor."
-  :version "29.1"
-  :type 'boolean
-  :group 'treesitter-context)
-
 (defcustom treesitter-context-frame-autohide-timeout 15
   "Child frame will hide itself after this seconds."
   :version "29.1"
@@ -107,7 +101,7 @@ If nil, show context only when the outmost parent is invisible."
       (goto-char (point-min))
       (cl-dolist (text contexts)
         (insert text "\n")))
-    (posframe-plus-show buffer t treesitter-context-hide-frame-after-move
+    (posframe-plus-show buffer t nil
                         :poshandler #'posframe-poshandler-window-top-right-corner
                         :border-width 1
                         :background-color background-color
@@ -116,6 +110,7 @@ If nil, show context only when the outmost parent is invisible."
                         :min-width (min (max treesitter-context-frame-min-width (/ (window-width) 2)) (window-width))
                         :min-height treesitter-context-frame-min-height
                         :accept-focus nil
+                        :hidehandler #'posframe-hidehandler-when-buffer-switch
                         :timeout treesitter-context-frame-autohide-timeout))
   nil)
 
