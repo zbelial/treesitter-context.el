@@ -43,10 +43,6 @@ The car of the pair is context, and the cdr is context.end."
         second
         third)
     (setq captures (treesit-query-capture node query (treesit-node-start node) (point)))
-    ;; (message "captures: %s" captures)
-    (cl-dolist (c captures)
-      ;; (message "capture: %s, node-type: %s" c (treesit-node-type (cdr c)))
-      )
     (when captures
       (setq index 0)
       (setq total (length captures))
@@ -97,17 +93,14 @@ Each node is indented according to INDENT-OFFSET."
          node-pairs
          context
          contexts)
-    ;; (message "parents: %s" parents)
     (when root
       (setq treesitter-context--indent-level 0)
       (setq root-start (treesit-node-start root))
       (when (or treesitter-context-show-context-always
                 (> (window-start) root-start))
         (setq groups (treesitter-context--capture root query-patterns (treesit-node-start root) (point)))
-        ;; (message "captures2: %s" groups)
         (when groups
           (setq node-pairs (seq-filter (lambda (group) (member (cdr (nth 0 group)) parents)) groups))
-          ;; (message "node-pairs: %s" node-pairs)
           (when node-pairs
             (let (context
                   context.real
