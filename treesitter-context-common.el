@@ -136,7 +136,7 @@ Each node is indented according to INDENT-OFFSET."
                     (setq start-pos (treesit-node-start context.real)
                           end-pos (treesit-node-start context.end)
                           line-no (line-number-at-pos start-pos))
-                    (cl-pushnew (cons lino-no (treesitter-context-indent-context context.real (buffer-substring start-pos end-pos) treesitter-context--indent-level indent-offset)) contexts)))
+                    (cl-pushnew (cons line-no (treesitter-context-indent-context context.real (buffer-substring start-pos end-pos) treesitter-context--indent-level indent-offset)) contexts)))
                   ;; (cl-pushnew (treesitter-context-indent-context context (buffer-substring start-pos end-pos) treesitter-context--indent-level indent-offset) contexts)
                   (setq treesitter-context--indent-level (1+ treesitter-context--indent-level)))))))))
     (nreverse contexts)))
