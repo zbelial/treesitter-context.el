@@ -86,6 +86,16 @@ If nil, show context only when the outmost parent is invisible."
 (defvar-local treesitter-context--context-list nil
   "A list storing context. The outmost one is at the front.")
 
+(defun treesitter-context--posframe-hidehandler-when-buffer-change (info)
+  "Posframe hidehandler function.
+
+This function let posframe hide when user switch buffer/kill buffer.
+See `posframe-show' for more infor about hidehandler and INFO ."
+  (let ((parent-buffer (cdr (plist-get info :posframe-parent-buffer))))
+    (or (not (buffer-live-p parent-buffer))
+        (and (buffer-live-p parent-buffer)
+             (not (equal parent-buffer (current-buffer)))))))
+
 (defun treesitter-context--show-context ()
   "Show context in a child frame."
   (let* ((buffer (get-buffer-create treesitter-context--buffer-name))
@@ -110,7 +120,7 @@ If nil, show context only when the outmost parent is invisible."
                         :min-width (min (max treesitter-context-frame-min-width (/ (window-width) 2)) (window-width))
                         :min-height treesitter-context-frame-min-height
                         :accept-focus nil
-                        :hidehandler #'posframe-hidehandler-when-buffer-switch
+                        :hidehandler #'treesitter-context--posframe-hidehandler-when-buffer-change
                         :timeout treesitter-context-frame-autohide-timeout))
   nil)
 
