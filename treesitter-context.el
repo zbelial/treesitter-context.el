@@ -217,5 +217,7 @@ See `posframe-show' for more infor about hidehandler and INFO ."
 (require 'treesitter-context-json)
 (require 'treesitter-context-javascript)
 (require 'treesitter-context-typescript)
+(require 'treesitter-context-yaml)
+(require 'treesitter-context-toml)
 
 (provide 'treesitter-context)

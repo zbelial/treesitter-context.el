@@ -21,6 +21,8 @@
   - python
   - rust
   - typescript
+  - yaml
+  - toml
 
 * How to install and use
   Clone this repo, add the path to `load-path`, then enable `treesitter-context-mode` in a buffer or add it to the <lang>-ts-mode-hook, where <lang> is a language this package supports. Like
