@@ -71,6 +71,12 @@ If nil, show context only when the outmost parent is invisible."
   :safe 'integerp
   :group 'treesitter-context)
 
+(defcustom treesitter-context-frame-font nil
+  "Font of the child frame."
+  :version "29.1"
+  :type 'string
+  :group 'treesitter-context)
+
 (defvar treesitter-context--supported-mode nil
   "Major modes that are support by treesitter-context.")
 
@@ -113,6 +119,7 @@ See `posframe-show' for more infor about hidehandler and INFO ."
         (insert text "\n")))
     (posframe-plus-show buffer t nil
                         :poshandler #'posframe-poshandler-window-top-right-corner
+                        :font treesitter-context-frame-font
                         :border-width 1
                         :background-color background-color
                         :internal-border-color "orange"
