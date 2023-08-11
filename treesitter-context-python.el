@@ -10,7 +10,7 @@
     (class_definition body: (_) @context.end) @context
     (function_definition body: (_) @context.end) @context
     (try_statement body: (_) @context.end) @context
-    (with_statement body: (_) @context.end) @context
+    (with_statement :anchor body: (_) @context.end) @context
     (for_statement body: (_) @context.end) @context
     (if_statement consequence: (_) @context.end) @context
     (elif_clause consequence: (_) @context.end) @context

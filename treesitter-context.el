@@ -50,6 +50,12 @@ If nil, show context only when the outmost parent is invisible."
   :type 'boolean
   :group 'treesitter-context)
 
+(defcustom treesitter-context-show-line-number nil
+  "If t, show line number in the child frame."
+  :version "29.1"
+  :type 'boolean
+  :group 'treesitter-context)
+
 (defcustom treesitter-context-frame-autohide-timeout 15
   "Child frame will hide itself after this seconds."
   :version "29.1"
@@ -102,6 +108,14 @@ See `posframe-show' for more infor about hidehandler and INFO ."
         (and (buffer-live-p parent-buffer)
              (not (equal parent-buffer (current-buffer)))))))
 
+(defun treesitter-context--string-pad-left (s len)
+  (let ((extra (max 0 (- len (length s)))))
+    (concat (make-string extra ?\s) s)))
+
+(defun treesitter-context--string-pad-right (s len)
+  (let ((extra (max 0 (- len (length s)))))
+    (concat s (make-string extra ?\s))))
+
 (defun treesitter-context--show-context ()
   "Show context in a child frame."
   (let* ((buffer (get-buffer-create treesitter-context--buffer-name))
@@ -111,12 +125,35 @@ See `posframe-show' for more infor about hidehandler and INFO ."
           (cond ((eq bg-mode 'dark)
                  (treesitter-context--color-blend (face-background 'default) "#000000" 0.1))
                 ((eq bg-mode 'light)
-                 (treesitter-context--color-blend (face-background 'default) "#000000" 0.8)))))
+                 (treesitter-context--color-blend (face-background 'default) "#000000" 0.8))))
+         (max-line-no 0)
+         (prefix-len 0)
+         (line-no-prefix "")
+         (blank-prefix "")
+         (padding "  ")
+         first-line-p)
+    (when treesitter-context-show-line-number
+      (cl-dolist (context contexts)
+        (when (> (car context) max-line-no)
+          (setq max-line-no (car context))))
+      (setq prefix-len (length (format "%s" max-line-no)))
+      (setq blank-prefix (make-string prefix-len ?\s)))
     (with-current-buffer buffer
       (erase-buffer)
       (goto-char (point-min))
-      (cl-dolist (text contexts)
-        (insert text "\n")))
+      (if treesitter-context-show-line-number
+          (progn
+            (cl-dolist (context contexts)
+              (setq first-line-p t)
+              (cl-dolist (line (cdr context))
+                (if first-line-p
+                    (progn
+                      (insert (concat (treesitter-context--string-pad-left (format "%s" (car context)) prefix-len) padding line))
+                      (setq first-line-p nil))
+                  (insert (concat blank-prefix padding line))))))
+        (cl-dolist (context contexts)
+          (cl-dolist (line (cdr context))
+            (insert line)))))
     (posframe-plus-show buffer t nil
                         :poshandler #'posframe-poshandler-window-top-right-corner
                         :font treesitter-context-frame-font
