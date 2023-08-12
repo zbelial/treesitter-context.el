@@ -2,6 +2,12 @@
 
 (require 'treesitter-context-common)
 
+(defcustom treesitter-context-java-show-modifiers nil
+  "If t, show modifierss of classes/methods."
+  :version "29.1"
+  :type 'boolean
+  :group 'treesitter-context)
+
 (defconst treesitter-context--java-node-types '("if_statement"
                                                 "for_statement"
                                                 "enhanced_for_statement"
@@ -17,8 +23,6 @@
     (and (<= start-pos point)
          (>= end-pos point))))
 
-;; FIXME: there is no else_statement/else_clause in java parser,
-;; so cannot decide whether the cursor is in else part or
 (defconst treesitter-context--java-query
   '(
     (if_statement consequence: (_) @context.end !alternative :anchor) @context
@@ -31,9 +35,28 @@
     (class_declaration body: (_) @context.end) @context)
   "Query patterns to capture desired nodes.")
 
+(defconst treesitter-context--java-query-no-modifiers
+  '(
+    (if_statement consequence: (_) @context.end !alternative :anchor) @context
+    (if_statement consequence: (_) @context.end alternative: (_)) @context
+    ((if_statement consequence: (_) "else" @context.real alternative: (_) @context.end) @context (:pred treesitter-context--java-check-else-range @context.end))
+    (for_statement body: (_) @context.end) @context
+    (while_statement body: (_) @context.end) @context
+    (enhanced_for_statement body: (_) @context.end) @context
+    (method_declaration (_) type: (_) @context.real body: (_) @context.end) @context
+    (class_declaration (_) "class" @context.real body: (_) @context.end) @context
+    (class_declaration :anchor "class" body: (_) @context.end) @context
+    )
+  "Query patterns to capture desired nodes.")
+
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode java-ts-mode))
   "Collect all of current node's parent nodes."
-  (treesitter-context-collect-contexts-base treesitter-context--java-node-types treesitter-context--java-query java-ts-mode-indent-offset))
+  (treesitter-context-collect-contexts-base
+   treesitter-context--java-node-types
+   (if treesitter-context-java-show-modifiers
+       treesitter-context--java-query
+     treesitter-context--java-query-no-modifiers)
+   java-ts-mode-indent-offset))
 
 (cl-defmethod treesitter-context-indent-context (node context indent-level indent-offset &context (major-mode java-ts-mode))
   (let ((node-type (treesit-node-type node)))
