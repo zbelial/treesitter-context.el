@@ -28,7 +28,7 @@
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode c++-ts-mode))
   "Collect all of current node's parent nodes."
-  (treesitter-context-collect-contexts-base treesitter-context--c++-node-types treesitter-context--c++-query c-ts-mode-indent-offset))
+  (treesitter-context-collect-contexts-base treesitter-context--c++-node-types treesitter-context--c++-query treesitter-context-frame-indent-offset))
 
 (cl-defmethod treesitter-context-indent-context (node context indent-level indent-offset &context (major-mode c++-ts-mode))
   (let ((node-type (treesit-node-type node)))

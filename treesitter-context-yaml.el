@@ -11,7 +11,7 @@
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode yaml-ts-mode))
   "Collect all of current node's parent nodes."
-  (treesitter-context-collect-contexts-base treesitter-context--yaml-node-types treesitter-context--yaml-query 4))
+  (treesitter-context-collect-contexts-base treesitter-context--yaml-node-types treesitter-context--yaml-query treesitter-context-frame-indent-offset))
 
 (add-to-list 'treesitter-context--supported-mode 'yaml-ts-mode t)
 

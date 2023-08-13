@@ -56,7 +56,7 @@
    (if treesitter-context-java-show-modifiers
        treesitter-context--java-query
      treesitter-context--java-query-no-modifiers)
-   java-ts-mode-indent-offset))
+   treesitter-context-frame-indent-offset))
 
 (cl-defmethod treesitter-context-indent-context (node context indent-level indent-offset &context (major-mode java-ts-mode))
   (let ((node-type (treesit-node-type node)))

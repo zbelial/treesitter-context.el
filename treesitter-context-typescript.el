@@ -31,7 +31,7 @@
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode typescript-ts-mode))
   "Collect all of current node's parent nodes."
-  (treesitter-context-collect-contexts-base treesitter-context--typescript-node-types treesitter-context--typescript-query typescript-ts-mode-indent-offset))
+  (treesitter-context-collect-contexts-base treesitter-context--typescript-node-types treesitter-context--typescript-query treesitter-context-frame-indent-offset))
 
 (cl-defmethod treesitter-context-indent-context (node context indent-level indent-offset &context (major-mode typescript-ts-mode))
   (let ((node-type (treesit-node-type node)))

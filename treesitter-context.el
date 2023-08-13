@@ -63,6 +63,13 @@ If nil, show context only when the outmost parent is invisible."
   :safe 'integerp
   :group 'treesitter-context)
 
+(defcustom treesitter-context-frame-indent-offset 4
+  "Indent offset in the child frame."
+  :version "29.1"
+  :type 'integer
+  :safe 'integerp
+  :group 'treesitter-context)
+
 (defcustom treesitter-context-frame-min-width 60
   "Minimal width of the child frame."
   :version "29.1"

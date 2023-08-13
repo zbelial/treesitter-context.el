@@ -26,7 +26,7 @@
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode rust-ts-mode))
   "Collect all of current node's parent nodes."
-  (treesitter-context-collect-contexts-base treesitter-context--rust-node-types treesitter-context--rust-query rust-ts-mode-indent-offset))
+  (treesitter-context-collect-contexts-base treesitter-context--rust-node-types treesitter-context--rust-query treesitter-context-frame-indent-offset))
 
 (cl-defmethod treesitter-context-indent-context (node context indent-level indent-offset &context (major-mode rust-ts-mode))
   (let ((node-type (treesit-node-type node)))

@@ -13,7 +13,7 @@
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode toml-ts-mode))
   "Collect all of current node's parent nodes."
-  (treesitter-context-collect-contexts-base treesitter-context--toml-node-types treesitter-context--toml-query 4))
+  (treesitter-context-collect-contexts-base treesitter-context--toml-node-types treesitter-context--toml-query treesitter-context-frame-indent-offset))
 
 (add-to-list 'treesitter-context--supported-mode 'toml-ts-mode t)
 
