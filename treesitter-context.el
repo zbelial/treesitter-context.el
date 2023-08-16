@@ -164,7 +164,7 @@ See `posframe-show' for more infor about hidehandler and INFO ."
         (cl-dolist (context contexts)
           (cl-dolist (line (cdr context))
             (insert line)))))
-    (setq treesitter-context--child-frame (posframe-plus-show buffer t nil
+    (setq treesitter-context--child-frame (posframe-plus-show buffer nil nil
                                                               :poshandler #'posframe-poshandler-window-top-right-corner
                                                               :font treesitter-context-frame-font
                                                               :border-width 1
