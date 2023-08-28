@@ -43,14 +43,14 @@
   :safe 'floatp
   :group 'treesitter-context)
 
-(defcustom treesitter-context-show-context-always nil
+(defcustom treesitter-context-show-context-always t
   "If t, show context all the time.
 If nil, show context only when the outmost parent is invisible."
   :version "29.1"
   :type 'boolean
   :group 'treesitter-context)
 
-(defcustom treesitter-context-show-line-number nil
+(defcustom treesitter-context-show-line-number t
   "If t, show line number in the child frame."
   :version "29.1"
   :type 'boolean
