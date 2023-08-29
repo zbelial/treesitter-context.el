@@ -32,6 +32,20 @@
 
   Be sure your Emacs version is 29.1 and above (built with tree-sitter support), and install the tree-sitter parsers you need.
 
+* Customization
+| Variable                                  | Default | Description                                                                               |
+|-------------------------------------------+---------+-------------------------------------------------------------------------------------------|
+| treesitter-context-idle-time              | $2.0$   | How many seconds to wait before refreshing context information                            |
+| treesitter-context-show-context-always    | t       | Show context all the time if t, if nil only show context when outmost parent is invisible |
+| treesitter-context-show-line-number       | t       | Show line number in the child frame                                                       |
+| treesitter-context-frame-autohide-timeout | 15      | Child frame will hide itself after this many seconds                                      |
+| treesitter-context-frame-indent-offset    | 4       | Indent offset in the child frame                                                          |
+| treesitter-context-frame-min-width        | 60      | Minimal width of the child frame                                                          |
+| treesitter-context-frame-min-height       | 5       | Minimal height of the child frame                                                         |
+| treesitter-context-frame-font             | nil     | Font of the child frame                                                                   |
+| treesitter-context-java-show-modifiers    | nil     | If t, show modifiers of the classes/methods                                               |
+
+  
 * CAUTION
   - +For some languages, such as go and java, treesitter-context cannot capture the "else" branch of the "if statement", so if the cursor in an "else" block, treesitter-context will display the "if" branch information.+
     Fixed now.
