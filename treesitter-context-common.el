@@ -5,6 +5,9 @@
 (require 'cl-lib)
 (require 'seq)
 
+(defvar treesitter-context--supported-mode nil
+  "Major modes that are support by treesitter-context.")
+
 (defun treesitter-context--color-blend (c1 c2 alpha)
   "Blend two colors C1 and C2 with ALPHA. C1 and C2 are hexidecimal strings.
 ALPHA is a number between 0.0 and 1.0 which corresponds to the influence of C1 on the result."
@@ -147,5 +150,28 @@ Each node is indented according to INDENT-OFFSET."
 
 (cl-defgeneric treesitter-context-indent-context (node context indent-level indent-offset)
   (treesitter-context--indent-context context indent-level indent-offset))
+
+
+(defun treesitter-context--focus-bounds (node-types)
+  (let ((node (treesit-node-at (point)))
+        result
+        (begin (point-min))
+        (end (point-max))
+        stop)
+    (while (and node
+                (not stop))
+      (if (member (treesit-node-type node) node-types)
+          (progn
+            (setq stop t)
+            (setq begin (treesit-node-start node)
+                  end (treesit-node-end node)))
+        (setq node (treesit-node-parent node))))
+    (if node
+        (list node begin end)
+      (list (treesit-buffer-root-node) begin end))))
+
+(cl-defgeneric treesitter-context-focus-bounds ()
+  "Return the bound that should be focused."
+  (user-error "%s is not supported by treesitter-context-focus." major-mode))
 
 (provide 'treesitter-context-common)

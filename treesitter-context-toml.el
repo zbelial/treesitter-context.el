@@ -15,6 +15,13 @@
   "Collect all of current node's parent nodes."
   (treesitter-context-collect-contexts-base treesitter-context--toml-node-types treesitter-context--toml-query treesitter-context-frame-indent-offset))
 
+(defconst treesitter-context--toml-focus-node-types '("table" "pair")
+  "Node types should be showed.")
+
+(cl-defmethod treesitter-context-focus-bounds (&context (major-mode toml-ts-mode))
+  "Return the bound that should be focused."
+  (treesitter-context--focus-bounds treesitter-context--toml-focus-node-types))
+
 (add-to-list 'treesitter-context--supported-mode 'toml-ts-mode t)
 
 (provide 'treesitter-context-toml)

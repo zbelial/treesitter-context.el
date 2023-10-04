@@ -13,6 +13,13 @@
   "Collect all of current node's parent nodes."
   (treesitter-context-collect-contexts-base treesitter-context--yaml-node-types treesitter-context--yaml-query treesitter-context-frame-indent-offset))
 
+(defconst treesitter-context--yaml-focus-node-types '("block_mapping_pair")
+  "Node types should be focused.")
+
+(cl-defmethod treesitter-context-focus-bounds (&context (major-mode yaml-ts-mode))
+  "Return the bound that should be focused."
+  (treesitter-context--focus-bounds treesitter-context--yaml-focus-node-types))
+
 (add-to-list 'treesitter-context--supported-mode 'yaml-ts-mode t)
 
 (provide 'treesitter-context-yaml)

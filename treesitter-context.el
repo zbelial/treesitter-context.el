@@ -90,9 +90,6 @@ If nil, show context only when the outmost parent is invisible."
   :type 'string
   :group 'treesitter-context)
 
-(defvar treesitter-context--supported-mode nil
-  "Major modes that are support by treesitter-context.")
-
 (defvar treesitter-context--buffer-name "*treesitter-context*"
   "Name of buffer used to show context.")
 

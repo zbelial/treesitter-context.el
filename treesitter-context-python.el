@@ -21,6 +21,9 @@
     (match_statement body: (_) @context.end) @context)
   "Query patterns to capture desired nodes.")
 
+(defconst treesitter-context--python-focus-node-types '("class_definition" "function_definition" "try_statement" "with_statement" "if_statement" "elif_clause" "else_clause" "case_clause" "while_statement" "match_statement" "for_statement")
+  "Node types should be showed.")
+
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode python-ts-mode))
   "Collect all of current node's parent nodes."
   (treesitter-context-collect-contexts-base treesitter-context--python-node-types treesitter-context--python-query treesitter-context-frame-indent-offset))
@@ -33,6 +36,10 @@
           (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))
       (setq treesitter-context--indent-level indent-level)
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
+
+(cl-defmethod treesitter-context-focus-bounds (&context (major-mode python-ts-mode))
+  "Return the bound that should be focused."
+  (treesitter-context--focus-bounds treesitter-context--python-focus-node-types))
 
 (add-to-list 'treesitter-context--supported-mode 'python-ts-mode t)
 

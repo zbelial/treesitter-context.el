@@ -67,6 +67,18 @@
       (setq treesitter-context--indent-level indent-level)
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
+(defconst treesitter-context--java-focus-node-types '("if_statement"
+                                                      "for_statement"
+                                                      "enhanced_for_statement"
+                                                      "while_statement"
+                                                      "class_declaration"
+                                                      "method_declaration")
+  "Node types should be focused.")
+
+(cl-defmethod treesitter-context-focus-bounds (&context (major-mode java-ts-mode))
+  "Return the bound that should be focused."
+  (treesitter-context--focus-bounds treesitter-context--java-focus-node-types))
+
 (add-to-list 'treesitter-context--supported-mode 'java-ts-mode t)
 
 (provide 'treesitter-context-java)

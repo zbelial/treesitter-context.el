@@ -44,6 +44,13 @@
       (setq treesitter-context--indent-level indent-level)
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
+(defconst treesitter-context--go-focus-node-types '("function_declaration" "func_literal" "method_declaration" "if_statement" "for_statement" "communication_case" "expression_switch_statement" "expression_case" "type_switch_statement" "type_case" "default_case")
+  "Node types should be focused.")
+
+(cl-defmethod treesitter-context-focus-bounds (&context (major-mode go-ts-mode))
+  "Return the bound that should be focused."
+  (treesitter-context--focus-bounds treesitter-context--go-focus-node-types))
+
 (add-to-list 'treesitter-context--supported-mode 'go-ts-mode t)
 
 (provide 'treesitter-context-go)

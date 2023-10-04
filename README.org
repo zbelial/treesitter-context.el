@@ -5,7 +5,9 @@
 #+LANGUAGE: en
 
 * Introduction
-  A minor mode shows context in a child-frame. You need Emacs 29.1 to run it, as treesitter-context use the builtin treesit.
+  There are two minor modes in this package, one (`treesitter-context-mode`) shows context in a child-frame, and the other (`treesitter-context-focus-mode`) dims surrounding text of current context.
+
+  You need Emacs 29.1 to run it, as treesitter-context use the builtin treesit.
 
   Here context means which class/method/function you are looking at, which loops/conditions are surrounding the cursor, so you can have an overview of where you are.
 
@@ -25,9 +27,10 @@
   - toml
 
 * How to install and use
-  Clone this repo, add the path to `load-path`, then enable `treesitter-context-mode` in a buffer or add it to the <lang>-ts-mode-hook, where <lang> is a language this package supports. Like
+  Clone this repo, add the path to `load-path`, then enable `treesitter-context-mode` and/or `treesitter-context-focus-mode` in a buffer or add it to the <lang>-ts-mode-hook, where <lang> is a language this package supports. Like
   #+BEGIN_SRC elisp 
     (add-hook 'rust-ts-mode-hook #'treesitter-context-mode)
+    (add-hook 'rust-ts-mode-hook #'treesitter-context-focus-mode)
   #+END_SRC
 
   Be sure your Emacs version is 29.1 and above (built with tree-sitter support), and install the tree-sitter parsers you need.
@@ -57,9 +60,11 @@
   1. Create a file, treesitter-context-<lang>.el. All of the following is in this file.
   2. Add `treesitter-context--<lang>-node-types`, this is the node types you are interested.
   3. Add `treesitter-context--<lang>-query`, the query patterns used to query nodes. See more information from [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Pattern-Matching.html][Emacs Manual]].
-  4. Implement `treesitter-context-collect-contexts`, current mojar mode specific method to collect context
+  4. Implement `treesitter-context-collect-contexts`, current mojar mode specific method to collect context.
   5. (Optional) Implement `treesitter-context-indent-context`. At the moment, this function is used to indent *else* , make sure the *else* has the same indentation with the previous *if*.
-  6. `(add-to-list 'treesitter-context--supported-mode '<lang>-ts-mode t)`, so treesitter-context knows that this language is supported.
+  6. Add `treesitter-context--<lang>-focus-node-types`, this is the node types that should be focused.
+  7. Implement `treesitter-context-focus-bounds`, current mojar mode specific method to get focus bounds.
+  8. `(add-to-list 'treesitter-context--supported-mode '<lang>-ts-mode t)`, so treesitter-context knows that this language is supported.
 
 * License
   GPLv3
@@ -68,3 +73,4 @@
   [[file:images/go.png]]
   [[file:images/rust.png]]
   [[file:images/python.png]]
+  [[file:images/python-focus.png]]

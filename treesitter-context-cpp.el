@@ -41,6 +41,13 @@
       (setq treesitter-context--indent-level indent-level)
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
+(defconst treesitter-context--c++-focus-node-types '("preproc_if" "preproc_ifdef" "preproc_else" "function_definition" "for_statement" "if_statement" "else_clause" "while_statement" "do_statement" "struct_specifier" "enum_specifier" "for_range_loop" "class_specifier" "linkage_specification" "switch_statement" "case_statement")
+  "Node types should be showed.")
+
+(cl-defmethod treesitter-context-focus-bounds (&context (major-mode c++-ts-mode))
+  "Return the bound that should be focused."
+  (treesitter-context--focus-bounds treesitter-context--c++-focus-node-types))
+
 (add-to-list 'treesitter-context--supported-mode 'c++-ts-mode t)
 
 (provide 'treesitter-context-cpp)
