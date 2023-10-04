@@ -5,7 +5,7 @@
 #+LANGUAGE: en
 
 * Introduction
-  There are two minor modes in this package, one (`treesitter-context-mode`) shows context in a child-frame, and the other (`treesitter-context-focus-mode`) dims surrounding text of current context.
+  There are two minor modes in this package, one (`treesitter-context-mode`) shows context in a child-frame, and the other (`treesitter-context-focus-mode`) dims surrounding text of current syntax block.
 
   You need Emacs 29.1 to run it, as treesitter-context use the builtin treesit.
 
