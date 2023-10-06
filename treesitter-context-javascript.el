@@ -39,7 +39,7 @@
       (setq treesitter-context--indent-level indent-level)
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
-(defconst treesitter-context--javascript-focus-node-types '("if_statement" "else_clause" "for_statement" "for_in_statement" "while_statement" "class_declaration" "class" "function" "arrow_function" "function_declaration" "generator_function_declaration" "method_definition" "switch_statement" "switch_case" "switch_default" "variable_declarator")
+(defconst treesitter-context--javascript-focus-node-types '("if_statement" "else_clause" "for_statement" "for_in_statement" "while_statement" "class_declaration" "class" "function" "arrow_function" "function_declaration" "generator_function_declaration" "method_definition" "switch_statement" "switch_case" "switch_default")
   "Node types should be focused.")
 
 (cl-defmethod treesitter-context-focus-bounds (&context (major-mode js-ts-mode))
