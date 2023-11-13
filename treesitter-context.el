@@ -96,6 +96,15 @@ If nil, show context only when the outmost parent is invisible."
 (defvar treesitter-context--indent-level 0
   "Indent level used to generate context information.")
 
+(defvar treesitter-context-background-color "#000000"
+  "Background color for treesitter-context posframe")
+
+(defvar treesitter-context-border-color "#FFFFFF"
+  "Border color for treesitter-context posframe")
+
+(defvar treesitter-context-border-width 1
+  "Border width for treesitter-context posframe")
+
 (defvar-local treesitter-context--refresh-timer nil
   "Idle timer for refreshing context.")
 
@@ -128,11 +137,6 @@ See `posframe-show' for more infor about hidehandler and INFO ."
   (let* ((buffer (get-buffer-create treesitter-context--buffer-name))
          (contexts treesitter-context--context-list)
          (bg-mode (frame-parameter nil 'background-mode))
-         (background-color
-          (cond ((eq bg-mode 'dark)
-                 (treesitter-context--color-blend (face-background 'default) "#000000" 0.1))
-                ((eq bg-mode 'light)
-                 (treesitter-context--color-blend (face-background 'default) "#000000" 0.8))))
          (max-line-no 0)
          (prefix-len 0)
          (line-no-prefix "")
@@ -164,10 +168,10 @@ See `posframe-show' for more infor about hidehandler and INFO ."
     (setq treesitter-context--child-frame (posframe-plus-show buffer nil nil
                                                               :poshandler #'posframe-poshandler-window-top-right-corner
                                                               :font treesitter-context-frame-font
-                                                              :border-width 1
-                                                              :background-color background-color
-                                                              :internal-border-color "orange"
-                                                              :internal-border-width 1
+                                                              :border-width treesitter-context-border-width
+                                                              :background-color treesitter-context-background-color
+                                                              :internal-border-color treesitter-context-border-color
+                                                              :internal-border-width treesitter-context-border-width
                                                               :min-width (min (max treesitter-context-frame-min-width (/ (window-width) 2)) (window-width))
                                                               :min-height treesitter-context-frame-min-height
                                                               :accept-focus nil
