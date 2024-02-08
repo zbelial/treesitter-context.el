@@ -86,7 +86,9 @@
   5. (Optional) Implement `treesitter-context-indent-context`. At the moment, this function is used to indent *else* , make sure the *else* has the same indentation with the previous *if*.
   6. Add `treesitter-context--<lang>-focus-node-types`, this is the node types that should be focused.
   7. Implement `treesitter-context-focus-bounds`, current mojar mode specific method to get focus bounds.
-  8. `(add-to-list 'treesitter-context--supported-mode '<lang>-ts-mode t)`, so treesitter-context knows that this language is supported.
+  8. Add `treesitter-context--<lang>-fold-node-types`, this is the node types that should be folded.
+  9. Implement `treesitter-context-fold-get-region`, current mojar mode specific method to get the region to be folded.
+  10. `(add-to-list 'treesitter-context--supported-mode '<lang>-ts-mode t)`, so treesitter-context knows that this language is supported.
 
 * License
   GPLv3
