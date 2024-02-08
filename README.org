@@ -61,8 +61,14 @@
 | treesitter-context-fold-show-fringe-marks       | t         | Whether to show fold markers in the fringe or not.                                        |
 | treesitter-context-fold-unfold-when-fold-region | nit       | When fold a region, whether unfold old foldings in this region or not.                    |
 
+* Commands
+** treesitter-context-fold-hide
+   Fold current code block.
+** treesitter-context-fold-show
+   Unfold current code block.
+** treesitter-context-fold-toggle
+   Toggle folding status of current code block.
 
-  
 * CAUTION
   - +For some languages, such as go and java, treesitter-context cannot capture the "else" branch of the "if statement", so if the cursor in an "else" block, treesitter-context will display the "if" branch information.+
     Fixed now.
