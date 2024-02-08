@@ -29,7 +29,7 @@
 ;;; Require 
 (require 'cl-lib)
 (require 'treesit)
-(require 'posframe-plus)
+(require 'posframe)
 
 (defgroup treesitter-context nil
   "Show context information around current point."
@@ -165,18 +165,18 @@ See `posframe-show' for more infor about hidehandler and INFO ."
         (cl-dolist (context contexts)
           (cl-dolist (line (cdr context))
             (insert line)))))
-    (setq treesitter-context--child-frame (posframe-plus-show buffer nil nil
-                                                              :poshandler #'posframe-poshandler-window-top-right-corner
-                                                              :font treesitter-context-frame-font
-                                                              :border-width treesitter-context-border-width
-                                                              :background-color treesitter-context-background-color
-                                                              :internal-border-color treesitter-context-border-color
-                                                              :internal-border-width treesitter-context-border-width
-                                                              :min-width (min (max treesitter-context-frame-min-width (/ (window-width) 2)) (window-width))
-                                                              :min-height treesitter-context-frame-min-height
-                                                              :accept-focus nil
-                                                              :hidehandler #'treesitter-context--posframe-hidehandler-when-buffer-change
-                                                              :timeout treesitter-context-frame-autohide-timeout)))
+    (setq treesitter-context--child-frame (posframe-show buffer
+                                                         :poshandler #'posframe-poshandler-window-top-right-corner
+                                                         :font treesitter-context-frame-font
+                                                         :border-width treesitter-context-border-width
+                                                         :background-color treesitter-context-background-color
+                                                         :internal-border-color treesitter-context-border-color
+                                                         :internal-border-width treesitter-context-border-width
+                                                         :min-width (min (max treesitter-context-frame-min-width (/ (window-width) 2)) (window-width))
+                                                         :min-height treesitter-context-frame-min-height
+                                                         :accept-focus nil
+                                                         :hidehandler #'treesitter-context--posframe-hidehandler-when-buffer-change
+                                                         :timeout treesitter-context-frame-autohide-timeout)))
   nil)
 
 (defun treesitter-context--refresh-context ()
