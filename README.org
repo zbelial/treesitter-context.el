@@ -5,7 +5,6 @@
 #+LANGUAGE: en
 
 * Introduction
-  There are two minor modes in this package, one (`treesitter-context-mode`) shows context in a child-frame, and the other (`treesitter-context-focus-mode`) dims surrounding text of current syntax block.
   There are three minor modes defined in this package.
   - treesitter-context-mode
 
