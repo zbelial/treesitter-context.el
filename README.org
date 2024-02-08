@@ -6,12 +6,19 @@
 
 * Introduction
   There are two minor modes in this package, one (`treesitter-context-mode`) shows context in a child-frame, and the other (`treesitter-context-focus-mode`) dims surrounding text of current syntax block.
+  There are three minor modes defined in this package.
+  - treesitter-context-mode
+    This minor mode will show context in a child frame.
+
+    Here context means which class/method/function you are looking at, which loops/conditions are surrounding the cursor, so you can have an overview of where you are.
+  - treesitter-context-focus-mode
+    This minor mode will dim surrounding text of current syntax block.
+  - treesitter-context-fold-mode
+    This minor mode support folding code blocks.
 
   You need Emacs 29.1 to run it, as treesitter-context use the builtin treesit.
 
-  Here context means which class/method/function you are looking at, which loops/conditions are surrounding the cursor, so you can have an overview of where you are.
-
-  It depends on [[https://github.com/zbelial/posframe-plus][posframe-plus]], which depends on [[https://github.com/tumashu/posframe][posframe]] further.
+  It depends on [[https://github.com/tumashu/posframe][posframe]] to show context.
   
 * Languages supported
   - c
@@ -36,20 +43,23 @@
   Be sure your Emacs version is 29.1 and above (built with tree-sitter support), and install the tree-sitter parsers you need.
 
 * Customization
-| Variable                                  | Default   | Description                                                                               |
-|-------------------------------------------+-----------+-------------------------------------------------------------------------------------------|
-| treesitter-context-idle-time              | 2.0       | How many seconds to wait before refreshing context information                            |
-| treesitter-context-show-context-always    | t         | Show context all the time if t, if nil only show context when outmost parent is invisible |
-| treesitter-context-show-line-number       | t         | Show line number in the child frame                                                       |
-| treesitter-context-frame-autohide-timeout | 15        | Child frame will hide itself after this many seconds                                      |
-| treesitter-context-frame-indent-offset    | 4         | Indent offset in the child frame                                                          |
-| treesitter-context-frame-min-width        | 60        | Minimal width of the child frame                                                          |
-| treesitter-context-frame-min-height       | 5         | Minimal height of the child frame                                                         |
-| treesitter-context-frame-font             | nil       | Font of the child frame                                                                   |
-| treesitter-context-java-show-modifiers    | nil       | If t, show modifiers of the classes/methods                                               |
-| treesitter-context-background-color       | "#000000" | Background color of the context frame                                                     |
-| treesitter-context-border-color           | "#FFFFFF" | Context frame border color                                                                |
-| treesitter-context-border-width           | 1         | Context frame border width                                                                |
+| Variable                                        | Default   | Description                                                                               |
+|-------------------------------------------------+-----------+-------------------------------------------------------------------------------------------|
+| treesitter-context-idle-time                    | 2.0       | How many seconds to wait before refreshing context information                            |
+| treesitter-context-show-context-always          | t         | Show context all the time if t, if nil only show context when outmost parent is invisible |
+| treesitter-context-show-line-number             | t         | Show line number in the child frame                                                       |
+| treesitter-context-frame-autohide-timeout       | 15        | Child frame will hide itself after this many seconds                                      |
+| treesitter-context-frame-indent-offset          | 4         | Indent offset in the child frame                                                          |
+| treesitter-context-frame-min-width              | 60        | Minimal width of the child frame                                                          |
+| treesitter-context-frame-min-height             | 5         | Minimal height of the child frame                                                         |
+| treesitter-context-frame-font                   | nil       | Font of the child frame                                                                   |
+| treesitter-context-java-show-modifiers          | nil       | If t, show modifiers of the classes/methods                                               |
+| treesitter-context-background-color             | "#000000" | Background color of the context frame                                                     |
+| treesitter-context-border-color                 | "#FFFFFF" | Context frame border color                                                                |
+| treesitter-context-border-width                 | 1         | Context frame border width                                                                |
+| treesitter-context-fold-ellipsis-content        | "..."     | Text to show in place of a folded block.                                                  |
+| treesitter-context-fold-show-fringe-marks       | t         | Whether to show fold markers in the fringe or not.                                        |
+| treesitter-context-fold-unfold-when-fold-region | nit       | When fold a region, whether unfold old foldings in this region or not.                    |
 
 
   

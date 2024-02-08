@@ -14,7 +14,7 @@
                                                 "while_statement"
                                                 "class_declaration"
                                                 "method_declaration")
-  "Node types should be showed.")
+  "Node types that may be showed.")
 
 (defun treesitter-context--java-check-else-range (node)
   (let ((start-pos (treesit-node-start node))
@@ -73,11 +73,24 @@
                                                       "while_statement"
                                                       "class_declaration"
                                                       "method_declaration")
-  "Node types should be focused.")
+  "Node types that may be focused.")
 
 (cl-defmethod treesitter-context-focus-bounds (&context (major-mode java-ts-mode))
   "Return the bound that should be focused."
   (treesitter-context--focus-bounds treesitter-context--java-focus-node-types))
+
+
+(defconst treesitter-context--java-fold-node-types '("if_statement"
+                                                     "for_statement"
+                                                     "enhanced_for_statement"
+                                                     "while_statement"
+                                                     "class_declaration"
+                                                     "method_declaration")
+  "Node types that may be folded.")
+
+(cl-defmethod treesitter-context-fold-get-region (&context (major-mode java-ts-mode))
+  "Get current code node's region."
+  (treesitter-context-fold--get-region-base treesitter-context--java-fold-node-types))
 
 (add-to-list 'treesitter-context--supported-mode 'java-ts-mode t)
 

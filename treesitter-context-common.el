@@ -175,4 +175,35 @@ Each node is indented according to INDENT-OFFSET."
   "Return the bound that should be focused."
   (user-error "%s is not supported by treesitter-context-focus." major-mode))
 
+(defun treesitter-context-fold--get-region-base (node-types)
+  "Get current code node's region."
+  (let ((node (treesit-node-at (point)))
+        (node-type)
+        (start-pos)
+        (end-pos))
+    (when node
+      (setq node-type (treesit-node-type node))
+      (if (member node-type node-types)
+          (progn
+            (setq start-pos (treesit-node-start node)
+                  end-pos (treesit-node-end node)))
+        (setq node (treesit-parent-until node
+                                         (lambda (n)
+                                           (member (treesit-node-type n) node-types))))
+        (when node
+          (setq start-pos (treesit-node-start node)
+                end-pos (treesit-node-end node)))))
+    (if (and start-pos end-pos)
+        (progn
+          (save-excursion
+            (goto-char start-pos)
+            (setq start-pos (line-end-position)))
+          (list start-pos end-pos node))
+      (message "No code region to fold.")
+      nil)))
+
+(cl-defgeneric treesitter-context-fold-get-region ()
+  "Get current code node's region."
+  (user-error "%s is not supported by treesitter-context-fold." major-mode))
+
 (provide 'treesitter-context-common)

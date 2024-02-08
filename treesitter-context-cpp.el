@@ -3,7 +3,7 @@
 (require 'treesitter-context-common)
 
 (defconst treesitter-context--c++-node-types '("preproc_if" "preproc_ifdef" "preproc_else" "function_definition" "for_statement" "if_statement" "else_clause" "while_statement" "do_statement" "struct_specifier" "enum_specifier" "for_range_loop" "class_specifier" "linkage_specification" "switch_statement" "case_statement")
-  "Node types should be showed.")
+  "Node types that may be showed.")
 
 (defconst treesitter-context--c++-query
   '(
@@ -42,11 +42,18 @@
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
 (defconst treesitter-context--c++-focus-node-types '("preproc_if" "preproc_ifdef" "preproc_else" "function_definition" "for_statement" "if_statement" "else_clause" "while_statement" "do_statement" "struct_specifier" "enum_specifier" "for_range_loop" "class_specifier" "linkage_specification" "switch_statement" "case_statement")
-  "Node types should be showed.")
+  "Node types that may be focused.")
 
 (cl-defmethod treesitter-context-focus-bounds (&context (major-mode c++-ts-mode))
   "Return the bound that should be focused."
   (treesitter-context--focus-bounds treesitter-context--c++-focus-node-types))
+
+(defconst treesitter-context--c++-fold-node-types '("preproc_if" "preproc_ifdef" "preproc_else" "function_definition" "for_statement" "if_statement" "else_clause" "while_statement" "do_statement" "struct_specifier" "for_range_loop" "class_specifier" "linkage_specification" "switch_statement" "case_statement")
+  "Node types that may be folded.")
+
+(cl-defmethod treesitter-context-fold-get-region (&context (major-mode c++-ts-mode))
+  "Get current code node's region."
+  (treesitter-context-fold--get-region-base treesitter-context--c++-fold-node-types))
 
 (add-to-list 'treesitter-context--supported-mode 'c++-ts-mode t)
 

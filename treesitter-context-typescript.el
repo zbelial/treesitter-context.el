@@ -3,7 +3,7 @@
 (require 'treesitter-context-common)
 
 (defconst treesitter-context--typescript-node-types '("if_statement" "else_clause" "for_statement" "for_in_statement" "while_statement" "class_declaration" "class" "function" "arrow_function" "function_declaration" "generator_function_declaration" "method_definition" "switch_statement" "switch_case" "switch_default" "pair" "variable_declarator" "internal_module" "enum_declaration" "enum_assignment")
-  "Node types should be showed.")
+  "Node types that may be showed.")
 
 (defconst treesitter-context--typescript-query
   '((if_statement consequence: (_) @context.end) @context
@@ -43,11 +43,18 @@
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
 (defconst treesitter-context--typescript-focus-node-types '("if_statement" "else_clause" "for_statement" "for_in_statement" "while_statement" "class_declaration" "class" "function" "arrow_function" "function_declaration" "generator_function_declaration" "method_definition" "switch_statement" "switch_case" "switch_default" "pair" "internal_module" "enum_declaration" "enum_assignment")
-  "Node types should be showed.")
+  "Node types that may be showed.")
 
 (cl-defmethod treesitter-context-focus-bounds (&context (major-mode typescript-ts-mode))
   "Return the bound that should be focused."
   (treesitter-context--focus-bounds treesitter-context--typescript-focus-node-types))
+
+(defconst treesitter-context--typescript-fold-node-types '("if_statement" "else_clause" "for_statement" "for_in_statement" "while_statement" "class_declaration" "class" "function" "arrow_function" "function_declaration" "generator_function_declaration" "method_definition" "switch_statement" "switch_case" "switch_default" "pair" "internal_module" "enum_declaration" "enum_assignment")
+  "Node types that may be folded.")
+
+(cl-defmethod treesitter-context-fold-get-region (&context (major-mode typescript-ts-mode))
+  "Get current code node's region."
+  (treesitter-context-fold--get-region-base treesitter-context--typescript-fold-node-types))
 
 (add-to-list 'treesitter-context--supported-mode 'typescript-ts-mode t)
 

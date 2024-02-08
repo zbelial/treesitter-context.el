@@ -3,7 +3,7 @@
 (require 'treesitter-context-common)
 
 (defconst treesitter-context--go-node-types '("function_declaration" "func_literal" "method_declaration" "if_statement" "for_statement" "communication_case" "expression_switch_statement" "expression_case" "type_switch_statement" "type_case" "default_case")
-  "Node types should be showed.")
+  "Node types that may be showed.")
 
 (defun treesitter-context--go-check-else-range (node)
   (let ((start-pos (treesit-node-start node))
@@ -45,11 +45,18 @@
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
 (defconst treesitter-context--go-focus-node-types '("function_declaration" "func_literal" "method_declaration" "if_statement" "for_statement" "communication_case" "expression_switch_statement" "expression_case" "type_switch_statement" "type_case" "default_case")
-  "Node types should be focused.")
+  "Node types that may be focused.")
 
 (cl-defmethod treesitter-context-focus-bounds (&context (major-mode go-ts-mode))
   "Return the bound that should be focused."
   (treesitter-context--focus-bounds treesitter-context--go-focus-node-types))
+
+(defconst treesitter-context--go-fold-node-types '("function_declaration" "func_literal" "method_declaration" "if_statement" "for_statement" "communication_case" "expression_switch_statement" "expression_case" "type_switch_statement" "type_case" "default_case")
+  "Node types that may be folded.")
+
+(cl-defmethod treesitter-context-fold-get-region (&context (major-mode go-ts-mode))
+  "Get current code node's region."
+  (treesitter-context-fold--get-region-base treesitter-context--go-fold-node-types))
 
 (add-to-list 'treesitter-context--supported-mode 'go-ts-mode t)
 

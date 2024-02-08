@@ -3,7 +3,7 @@
 (require 'treesitter-context-common)
 
 (defconst treesitter-context--rust-node-types '("if_expression" "else_clause" "match_expression" "match_arm" "for_expression" "while_expression" "loop_expression" "closure_expression" "function_item" "impl_item" "trait_item" "struct_item" "enum_item" "mod_item")
-  "Node types should be showed.")
+  "Node types that may be showed.")
 
 (defconst treesitter-context--rust-query
   '(
@@ -38,11 +38,18 @@
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
 (defconst treesitter-context--rust-focus-node-types '("if_expression" "else_clause" "match_expression" "match_arm" "for_expression" "while_expression" "loop_expression" "closure_expression" "function_item" "impl_item" "trait_item" "struct_item" "enum_item" "mod_item")
-  "Node types should be focused.")
+  "Node types that may be focused.")
 
 (cl-defmethod treesitter-context-focus-bounds (&context (major-mode rust-ts-mode))
   "Return the bound that should be focused."
   (treesitter-context--focus-bounds treesitter-context--rust-focus-node-types))
+
+(defconst treesitter-context--rust-fold-node-types '("if_expression" "else_clause" "match_expression" "match_arm" "for_expression" "while_expression" "loop_expression" "closure_expression" "function_item" "impl_item" "trait_item" "struct_item" "enum_item" "mod_item")
+  "Node types that may be folded.")
+
+(cl-defmethod treesitter-context-fold-get-region (&context (major-mode rust-ts-mode))
+  "Get current code node's region."
+  (treesitter-context-fold--get-region-base treesitter-context--rust-fold-node-types))
 
 (add-to-list 'treesitter-context--supported-mode 'rust-ts-mode t)
 

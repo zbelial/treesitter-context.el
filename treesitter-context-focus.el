@@ -23,6 +23,8 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+(require 'treesitter-context-common)
+
 (defface treesitter-context-focus-unfocused
   '((t :inherit shadow))
   "The face that overlays the unfocused area."

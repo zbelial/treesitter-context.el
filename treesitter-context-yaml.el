@@ -3,7 +3,7 @@
 (require 'treesitter-context-common)
 
 (defconst treesitter-context--yaml-node-types '("block_mapping_pair")
-  "Node types should be showed.")
+  "Node types that may be showed.")
 
 (defconst treesitter-context--yaml-query
   '((block_mapping_pair key: (_) :anchor ":" (_) @context.end) @context)
@@ -14,7 +14,7 @@
   (treesitter-context-collect-contexts-base treesitter-context--yaml-node-types treesitter-context--yaml-query treesitter-context-frame-indent-offset))
 
 (defconst treesitter-context--yaml-focus-node-types '("block_mapping_pair")
-  "Node types should be focused.")
+  "Node types that may be focused.")
 
 (cl-defmethod treesitter-context-focus-bounds (&context (major-mode yaml-ts-mode))
   "Return the bound that should be focused."
