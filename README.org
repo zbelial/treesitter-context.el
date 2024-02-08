@@ -18,6 +18,8 @@
 
     This minor mode support folding code blocks.
 
+    You may find [[https://github.com/zbelial/yafolding.el][yafolding]] useful, since it's more general than treesitter-context-fold-mode.
+
   You need Emacs 29.1 to run it, as treesitter-context use the builtin treesit.
 
   It depends on [[https://github.com/tumashu/posframe][posframe]] to show context.
