@@ -16,7 +16,7 @@
     This minor mode will dim surrounding text of current syntax block.
   - treesitter-context-fold-mode
 
-    This minor mode support folding code blocks.
+    This minor mode supports folding code blocks.
 
     You may find [[https://github.com/zbelial/yafolding.el][yafolding]] useful, since it's more general than treesitter-context-fold-mode.
 
