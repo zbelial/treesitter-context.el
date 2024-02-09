@@ -53,7 +53,22 @@
 
 (cl-defmethod treesitter-context-fold-get-region (&context (major-mode c++-ts-mode))
   "Get current code node's region."
-  (treesitter-context-fold--get-region-base treesitter-context--c++-fold-node-types))
+  (let ((region (treesitter-context-fold--get-region-base treesitter-context--c++-fold-node-types))
+        (start)
+        (end)
+        (node)
+        (node-type)
+        (target))
+    (when region
+      (setq start (nth 0 region)
+            end (nth 1 region)
+            node (nth 2 region))
+      (setq node-type (treesit-node-type node))
+      (cond
+       (t
+        (if (= (char-before end) ?})
+            (list start (1- end) node)
+          (list start end node)))))))
 
 (add-to-list 'treesitter-context--supported-mode 'c++-ts-mode t)
 

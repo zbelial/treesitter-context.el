@@ -51,7 +51,20 @@
 
 (cl-defmethod treesitter-context-fold-get-region (&context (major-mode js-ts-mode))
   "Get current code node's region."
-  (treesitter-context-fold--get-region-base treesitter-context--javascript-fold-node-types))
+  (let ((region (treesitter-context-fold--get-region-base treesitter-context--javascript-fold-node-types))
+        (start)
+        (end)
+        (node)
+        (node-type)
+        (target))
+    (when region
+      (setq start (nth 0 region)
+            end (nth 1 region)
+            node (nth 2 region))
+      (setq node-type (treesit-node-type node))
+      (cond
+       (t
+        (list start (1- end) node))))))
 
 (add-to-list 'treesitter-context--supported-mode 'js-ts-mode t)
 

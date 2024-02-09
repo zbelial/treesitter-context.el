@@ -180,16 +180,19 @@ Each node is indented according to INDENT-OFFSET."
   (let ((node (treesit-node-at (point)))
         (node-type)
         (start-pos)
-        (end-pos))
+        (end-pos)
+        (current-line (line-number-at-pos nil t)))
     (when node
       (setq node-type (treesit-node-type node))
-      (if (member node-type node-types)
+      (if (and (member node-type node-types)
+               (>= current-line (line-number-at-pos (treesit-node-start node) t)))
           (progn
             (setq start-pos (treesit-node-start node)
                   end-pos (treesit-node-end node)))
         (setq node (treesit-parent-until node
                                          (lambda (n)
-                                           (member (treesit-node-type n) node-types))))
+                                           (and (member (treesit-node-type n) node-types)
+                                                (>= current-line (line-number-at-pos (treesit-node-start n) t))))))
         (when node
           (setq start-pos (treesit-node-start node)
                 end-pos (treesit-node-end node)))))

@@ -49,7 +49,25 @@
 
 (cl-defmethod treesitter-context-fold-get-region (&context (major-mode rust-ts-mode))
   "Get current code node's region."
-  (treesitter-context-fold--get-region-base treesitter-context--rust-fold-node-types))
+  (let ((region (treesitter-context-fold--get-region-base treesitter-context--rust-fold-node-types))
+        (start)
+        (end)
+        (node)
+        (node-type)
+        (target))
+    (when region
+      (setq start (nth 0 region)
+            end (nth 1 region)
+            node (nth 2 region))
+      (setq node-type (treesit-node-type node))
+      (cond
+       ((string-equal node-type "function_item")
+        (setq target (treesit-node-child-by-field-name node "body"))
+        (if target
+            (list (1+ (treesit-node-start target)) (1- end) node target)
+          region))
+       (t
+        (list start (1- end) node))))))
 
 (add-to-list 'treesitter-context--supported-mode 'rust-ts-mode t)
 

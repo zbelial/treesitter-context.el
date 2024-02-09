@@ -90,7 +90,35 @@
 
 (cl-defmethod treesitter-context-fold-get-region (&context (major-mode java-ts-mode))
   "Get current code node's region."
-  (treesitter-context-fold--get-region-base treesitter-context--java-fold-node-types))
+  (let ((region (treesitter-context-fold--get-region-base treesitter-context--java-fold-node-types))
+        (start)
+        (end)
+        (new-end)
+        (node)
+        (node-type)
+        (target))
+    (when region
+      (setq start (nth 0 region)
+            end (nth 1 region)
+            node (nth 2 region))
+      (if (= (char-before end) ?})
+          (setq new-end (1- end))
+        (setq new-end end))
+      (setq node-type (treesit-node-type node))
+      (cond
+       ((or (string-equal node-type "method_declaration")
+            (string-equal node-type "class_declaration"))
+        (setq target (treesit-node-child-by-field-name node "body"))
+        (if target
+            (list (1+ (treesit-node-start target)) new-end node target)
+          region))
+       ((string-equal node-type "if_statement")
+        (setq target (treesit-node-child-by-field-name node "consequence"))
+        (if target
+            (list (1+ (treesit-node-start target)) new-end node target)
+          region))
+       (t
+        (list start new-end node))))))
 
 (add-to-list 'treesitter-context--supported-mode 'java-ts-mode t)
 
