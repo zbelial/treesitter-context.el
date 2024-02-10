@@ -6,7 +6,7 @@
   "Node types that may be showed.")
 
 (defconst treesitter-context--yaml-query
-  '((block_mapping_pair key: (_) :anchor ":" (_) @context.end) @context)
+  (treesit-query-compile 'yaml '((block_mapping_pair key: (_) :anchor ":" (_) @context.end) @context))
   "Query patterns to capture desired nodes.")
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode yaml-ts-mode))

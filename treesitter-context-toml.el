@@ -6,9 +6,9 @@
   "Node types that may be showed.")
 
 (defconst treesitter-context--toml-query
-  '((table "[" (_) "]" :anchor (_) @context.end) @context
-    (pair (_) :anchor "=" @context.end) @context
-    )
+  (treesit-query-compile 'toml '((table "[" (_) "]" :anchor (_) @context.end) @context
+                                 (pair (_) :anchor "=" @context.end) @context
+                                 ))
   "Query patterns to capture desired nodes.")
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode toml-ts-mode))

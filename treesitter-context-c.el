@@ -13,22 +13,22 @@
          (>= end-pos point))))
 
 (defconst treesitter-context--c-query
-  '(
-    (preproc_if condition: (_) :anchor (_) @context.end) @context
-    (preproc_else (_) @context.end) @context
-    (preproc_ifdef name: (identifier) :anchor (_) @context.end) @context
-    (function_definition body: (_) @context.end) @context
-    (for_statement body: (_) @context.end) @context
-    (if_statement consequence: (_) @context.end) @context
-    (else_clause (_) @context.end) @context
-    (while_statement body: (_) @context.end) @context
-    (do_statement body: (_) @context.end) @context
-    (switch_statement body: (_) @context.end) @context
-    (case_statement value: (_) :anchor) @context
-    (case_statement value: (_) :anchor (_) @context.end) @context
-    (case_statement "default" :anchor (_) @context.end) @context
-    (struct_specifier body: (_) @context.end) @context
-    (enum_specifier body: (_) @context.end) @context)
+  (treesit-query-compile 'c '(
+                              (preproc_if condition: (_) :anchor (_) @context.end) @context
+                              (preproc_else (_) @context.end) @context
+                              (preproc_ifdef name: (identifier) :anchor (_) @context.end) @context
+                              (function_definition body: (_) @context.end) @context
+                              (for_statement body: (_) @context.end) @context
+                              (if_statement consequence: (_) @context.end) @context
+                              (else_clause (_) @context.end) @context
+                              (while_statement body: (_) @context.end) @context
+                              (do_statement body: (_) @context.end) @context
+                              (switch_statement body: (_) @context.end) @context
+                              (case_statement value: (_) :anchor) @context
+                              (case_statement value: (_) :anchor (_) @context.end) @context
+                              (case_statement "default" :anchor (_) @context.end) @context
+                              (struct_specifier body: (_) @context.end) @context
+                              (enum_specifier body: (_) @context.end) @context))
   "Query patterns to capture desired nodes.")
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode c-ts-mode))

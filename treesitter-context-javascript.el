@@ -6,24 +6,24 @@
   "Node types that may be showed.")
 
 (defconst treesitter-context--javascript-query
-  '((if_statement consequence: (_) @context.end) @context
-    (else_clause :anchor (_) @context.end) @context
-    (for_statement body: (_) @context.end) @context
-    (for_in_statement body: (_) @context.end) @context
-    (while_statement body: (_) @context.end) @context
-    (class_declaration body: (_) @context.end) @context
-    (class body: (_) @context.end) @context
-    (function body: (_) @context.end) @context
-    (arrow_function body: (_) @context.end) @context
-    (function_declaration body: (_) @context.end) @context
-    (generator_function_declaration body: (_) @context.end) @context
-    (method_definition body: (_) @context.end) @context
-    (switch_statement body: (_) @context.end) @context
-    (switch_case body: (_) @context.end) @context
-    (switch_default body: (_) @context.end) @context
-    (variable_declarator name: (_) :anchor (_):? @context.end) @context
-    (pair value: (_) @context.end) @context
-    )
+  (treesit-query-compile 'javascript '((if_statement consequence: (_) @context.end) @context
+                                       (else_clause :anchor (_) @context.end) @context
+                                       (for_statement body: (_) @context.end) @context
+                                       (for_in_statement body: (_) @context.end) @context
+                                       (while_statement body: (_) @context.end) @context
+                                       (class_declaration body: (_) @context.end) @context
+                                       (class body: (_) @context.end) @context
+                                       (function body: (_) @context.end) @context
+                                       (arrow_function body: (_) @context.end) @context
+                                       (function_declaration body: (_) @context.end) @context
+                                       (generator_function_declaration body: (_) @context.end) @context
+                                       (method_definition body: (_) @context.end) @context
+                                       (switch_statement body: (_) @context.end) @context
+                                       (switch_case body: (_) @context.end) @context
+                                       (switch_default body: (_) @context.end) @context
+                                       (variable_declarator name: (_) :anchor (_):? @context.end) @context
+                                       (pair value: (_) @context.end) @context
+                                       ))
   "Query patterns to capture desired nodes.")
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode js-ts-mode))

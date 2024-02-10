@@ -6,7 +6,7 @@
   "Node types that may be showed.")
 
 (defconst treesitter-context--json-query
-  '((pair value: (_) @context.end) @context)
+  (treesit-query-compile 'json '((pair value: (_) @context.end) @context))
   "Query patterns to capture desired nodes.")
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode json-ts-mode))

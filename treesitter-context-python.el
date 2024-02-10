@@ -6,24 +6,24 @@
   "Node types that may be showed.")
 
 (defconst treesitter-context--python-query
-  '(
-    (class_definition body: (_) @context.end) @context
-    ;; (function_definition body: (_) @context.end) @context
-    (function_definition parameters: (_) :anchor ":" @context.end) @context
-    (try_statement body: (_) @context.end) @context
-    (with_statement :anchor body: (_) @context.end) @context
-    ;; (for_statement body: (_) @context.end) @context
-    (for_statement right: (_) :anchor ":" @context.end) @context
-    ;; (if_statement consequence: (_) @context.end) @context
-    (if_statement condition: (_) :anchor ":" @context.end) @context
-    ;; (elif_clause consequence: (_) @context.end) @context
-    (elif_clause condition: (_) :anchor ":" @context.end) @context
-    ;; (else_clause body: (_) @context.end) @context
-    (else_clause :anchor ":" @context.end) @context
-    (case_clause consequence: (_) @context.end) @context
-    (while_statement body: (_) @context.end) @context
-    (except_clause (block) @context.end) @context
-    (match_statement body: (_) @context.end) @context)
+  (treesit-query-compile 'python '(
+                                   (class_definition body: (_) @context.end) @context
+                                   ;; (function_definition body: (_) @context.end) @context
+                                   (function_definition parameters: (_) :anchor ":" @context.end) @context
+                                   (try_statement body: (_) @context.end) @context
+                                   (with_statement :anchor body: (_) @context.end) @context
+                                   ;; (for_statement body: (_) @context.end) @context
+                                   (for_statement right: (_) :anchor ":" @context.end) @context
+                                   ;; (if_statement consequence: (_) @context.end) @context
+                                   (if_statement condition: (_) :anchor ":" @context.end) @context
+                                   ;; (elif_clause consequence: (_) @context.end) @context
+                                   (elif_clause condition: (_) :anchor ":" @context.end) @context
+                                   ;; (else_clause body: (_) @context.end) @context
+                                   (else_clause :anchor ":" @context.end) @context
+                                   (case_clause consequence: (_) @context.end) @context
+                                   (while_statement body: (_) @context.end) @context
+                                   (except_clause (block) @context.end) @context
+                                   (match_statement body: (_) @context.end) @context))
   "Query patterns to capture desired nodes.")
 
 (defconst treesitter-context--python-focus-node-types '("class_definition" "function_definition" "try_statement" "with_statement" "if_statement" "elif_clause" "else_clause" "case_clause" "while_statement" "match_statement" "for_statement")

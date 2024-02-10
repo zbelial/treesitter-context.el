@@ -24,29 +24,29 @@
          (>= end-pos point))))
 
 (defconst treesitter-context--java-query
-  '(
-    (if_statement consequence: (_) @context.end !alternative :anchor) @context
-    (if_statement consequence: (_) @context.end alternative: (_)) @context
-    ((if_statement consequence: (_) "else" @context.real alternative: (_) @context.end) @context (:pred treesitter-context--java-check-else-range @context.end))
-    (for_statement body: (_) @context.end) @context
-    (while_statement body: (_) @context.end) @context
-    (enhanced_for_statement body: (_) @context.end) @context
-    (method_declaration body: (_) @context.end) @context
-    (class_declaration body: (_) @context.end) @context)
+  (treesit-query-compile 'java '(
+                                 (if_statement consequence: (_) @context.end !alternative :anchor) @context
+                                 (if_statement consequence: (_) @context.end alternative: (_)) @context
+                                 ((if_statement consequence: (_) "else" @context.real alternative: (_) @context.end) @context (:pred treesitter-context--java-check-else-range @context.end))
+                                 (for_statement body: (_) @context.end) @context
+                                 (while_statement body: (_) @context.end) @context
+                                 (enhanced_for_statement body: (_) @context.end) @context
+                                 (method_declaration body: (_) @context.end) @context
+                                 (class_declaration body: (_) @context.end) @context))
   "Query patterns to capture desired nodes.")
 
 (defconst treesitter-context--java-query-no-modifiers
-  '(
-    (if_statement consequence: (_) @context.end !alternative :anchor) @context
-    (if_statement consequence: (_) @context.end alternative: (_)) @context
-    ((if_statement consequence: (_) "else" @context.real alternative: (_) @context.end) @context (:pred treesitter-context--java-check-else-range @context.end))
-    (for_statement body: (_) @context.end) @context
-    (while_statement body: (_) @context.end) @context
-    (enhanced_for_statement body: (_) @context.end) @context
-    (method_declaration (_) type: (_) @context.real body: (_) @context.end) @context
-    (class_declaration (_) "class" @context.real body: (_) @context.end) @context
-    (class_declaration :anchor "class" body: (_) @context.end) @context
-    )
+  (treesit-query-compile 'java '(
+                                 (if_statement consequence: (_) @context.end !alternative :anchor) @context
+                                 (if_statement consequence: (_) @context.end alternative: (_)) @context
+                                 ((if_statement consequence: (_) "else" @context.real alternative: (_) @context.end) @context (:pred treesitter-context--java-check-else-range @context.end))
+                                 (for_statement body: (_) @context.end) @context
+                                 (while_statement body: (_) @context.end) @context
+                                 (enhanced_for_statement body: (_) @context.end) @context
+                                 (method_declaration (_) type: (_) @context.real body: (_) @context.end) @context
+                                 (class_declaration (_) "class" @context.real body: (_) @context.end) @context
+                                 (class_declaration :anchor "class" body: (_) @context.end) @context
+                                 ))
   "Query patterns to capture desired nodes.")
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode java-ts-mode))

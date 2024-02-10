@@ -6,22 +6,22 @@
   "Node types that may be showed.")
 
 (defconst treesitter-context--rust-query
-  '(
-    (if_expression consequence: (_) @context.end) @context
-    (else_clause (block (_)) @context.end) @context
-    (match_expression body: (_) @context.end) @context
-    (match_arm pattern: (_) :anchor (_) @context.end) @context
-    (for_expression body: (_) @context.end) @context
-    (while_expression body: (_) @context.end) @context
-    (loop_expression body: (_) @context.end) @context
-    (closure_expression body: (_) @context.end) @context
-    (function_item body: (_) @context.end) @context
-    (impl_item body: (_) @context.end) @context
-    (trait_item body: (_) @context.end) @context
-    (struct_item body: (_) @context.end) @context
-    (enum_item body: (_) @context.end) @context
-    (mod_item body: (_) @context.end) @context
-    )
+  (treesit-query-compile 'rust '(
+                                 (if_expression consequence: (_) @context.end) @context
+                                 (else_clause (block (_)) @context.end) @context
+                                 (match_expression body: (_) @context.end) @context
+                                 (match_arm pattern: (_) :anchor (_) @context.end) @context
+                                 (for_expression body: (_) @context.end) @context
+                                 (while_expression body: (_) @context.end) @context
+                                 (loop_expression body: (_) @context.end) @context
+                                 (closure_expression body: (_) @context.end) @context
+                                 (function_item body: (_) @context.end) @context
+                                 (impl_item body: (_) @context.end) @context
+                                 (trait_item body: (_) @context.end) @context
+                                 (struct_item body: (_) @context.end) @context
+                                 (enum_item body: (_) @context.end) @context
+                                 (mod_item body: (_) @context.end) @context
+                                 ))
   "Query patterns to capture desired nodes.")
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode rust-ts-mode))
