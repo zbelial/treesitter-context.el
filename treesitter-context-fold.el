@@ -74,7 +74,8 @@
     (dolist (ov overlays)
       (when (and (= (overlay-start ov) beg)
                  (= (overlay-end ov) end))
-        (push ov result)))))
+        (push ov result)))
+    result))
 
 (defun treesitter-context-fold--show-region (beg end)
   "Delete all folding overlays between BEG and END."
@@ -104,22 +105,10 @@
 (defun treesitter-context-fold-hide ()
   "Fold current code node."
   (interactive)
-  (let ((overlays (treesitter-context-fold--get-overlays (line-beginning-position) (1+ (line-end-position)))))
-    ;; If there are overlays on current line, don't try to fold again.
-    (unless overlays
-      (when-let ((region (treesitter-context-fold-get-region)))
-        (let ((beg (nth 0 region))
-              (end (nth 1 region)))
-          (treesitter-context-fold--hide-region beg end))))))
-
-;;;###autoload
-(defun treesitter-context-fold-hide ()
-  "Fold current code node."
-  (interactive)
   (when-let ((region (treesitter-context-fold-get-region)))
     (let ((beg (nth 0 region))
           (end (nth 1 region)))
-      (let ((overlays (treesitter-context-fold--get-exact-overlays beg (1+ end))))
+      (let ((overlays (treesitter-context-fold--get-exact-overlays beg end)))
         ;; If there are overlays with the same region, don't try to fold again.
         (unless overlays
           (setq overlays (treesitter-context-fold--hide-region beg end)))
@@ -147,10 +136,11 @@
   (interactive)
   (let ((region (treesitter-context-fold-get-region)))
     (if region
-        (progn
-          (message "start: %s" (nth 0 region))
-          (message "end:   %s" (nth 1 region))
-          (message "node:  %s" (nth 2 region)))
+        (message "region: %s" region)
+      ;; (progn
+      ;;   (message "start: %s" (nth 0 region))
+      ;;   (message "end:   %s" (nth 1 region))
+      ;;   (message "node:  %s" (nth 2 region)))
       (message "No valid region here."))))
 
 ;;;###autoload
