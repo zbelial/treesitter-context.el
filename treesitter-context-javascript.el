@@ -46,7 +46,7 @@
   "Return the bound that should be focused."
   (treesitter-context--focus-bounds treesitter-context--javascript-focus-node-types))
 
-(defconst treesitter-context--javascript-fold-node-types '("if_statement" "else_clause" "for_statement" "for_in_statement" "while_statement" "class_declaration" "class" "function" "arrow_function" "function_declaration" "generator_function_declaration" "method_definition" "switch_statement" "switch_case" "switch_default")
+(defconst treesitter-context--javascript-fold-node-types '("if_statement" "else_clause" "for_statement" "for_in_statement" "while_statement" "class_declaration" "arrow_function" "function_declaration" "generator_function_declaration" "method_definition" "switch_statement" "switch_case" "switch_default")
   "Node types that may be folded.")
 
 (cl-defmethod treesitter-context-fold-get-region (&context (major-mode js-ts-mode))
