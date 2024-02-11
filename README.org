@@ -103,3 +103,4 @@
   [[file:images/rust.png]]
   [[file:images/python.png]]
   [[file:images/python-focus.png]]
+  [[file:images/folding.png]]
