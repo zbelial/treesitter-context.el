@@ -76,15 +76,41 @@ The car of the pair is context, and the cdr is context.end."
       (setq result (nreverse result)))
     result))
 
+;; not used yet
 (defun treesitter-context--indent-context (context level offset)
   (let ((lines (string-split context "\n" t))
         (indentation (make-string (* level offset) ?\s))
         result)
     (cl-dolist (line lines)
-      (setq line (string-trim line))
-      (when (length> line 0)
+      (when (length> (string-trim line) 0)
         (cl-pushnew (concat indentation line "\n") result)))
     (nreverse result)))
+
+(defun treesitter-context--cut-context (beg end)
+  (let ((beg-line-no (line-number-at-pos beg))
+        (end-line-no (line-number-at-pos end))
+        (first-indent 0)
+        beg-column
+        beg-column0-pos
+        lines)
+    (if (= beg-line-no end-line-no)
+        (buffer-substring beg end)
+      (save-excursion
+        (save-restriction
+          (goto-char beg)
+          (setq beg-column0-pos (line-beginning-position))
+          (setq beg-column (- beg beg-column0-pos))
+          (push (buffer-substring beg (line-end-position)) lines)
+          (forward-line)
+          (while (< (line-number-at-pos) end-line-no)
+            (if (> (current-indentation) beg-column)
+                (push (buffer-substring (+ (line-beginning-position) beg-column) (line-end-position)) lines)
+              (push (buffer-substring (line-beginning-position) (line-end-position)) lines))
+            (forward-line))
+          (if (> (current-indentation) beg-column)
+              (push (buffer-substring (+ (line-beginning-position) beg-column) end) lines)
+            (push (buffer-substring (line-beginning-position) end) lines))
+          (mapconcat #'identity (nreverse lines) "\n"))))))
 
 (defun treesitter-context-collect-contexts-base (node-types query-patterns indent-offset)
   "Collect all of current node's parent nodes with node-type in NODE-TYPES.
@@ -141,7 +167,6 @@ Each node is indented according to INDENT-OFFSET."
                             end-pos (treesit-node-start context.end)
                             line-no (line-number-at-pos start-pos))
                       (cl-pushnew (cons line-no (treesitter-context-indent-context context.real (buffer-substring start-pos end-pos) treesitter-context--indent-level indent-offset)) contexts)))
-                    ;; (cl-pushnew (treesitter-context-indent-context context (buffer-substring start-pos end-pos) treesitter-context--indent-level indent-offset) contexts)
                     (setq treesitter-context--indent-level (1+ treesitter-context--indent-level))))))))))
     (nreverse contexts)))
 
