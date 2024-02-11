@@ -66,7 +66,7 @@
 | treesitter-context-border-width                 | 1         | Context frame border width                                                                |
 | treesitter-context-fold-ellipsis-content        | "..."     | Text to show in place of a folded block.                                                  |
 | treesitter-context-fold-show-fringe-marks       | t         | Whether to show fold markers in the fringe or not.                                        |
-| treesitter-context-fold-unfold-when-fold-region | nil       | When fold a region, whether unfold old foldings in this region or not.                    |
+| treesitter-context-fold-unfold-when-fold-region | nil       | When folding a region, whether unfold old foldings in this region or not.                 |
 
 * Commands
 ** treesitter-context-fold-hide
