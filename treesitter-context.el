@@ -90,6 +90,13 @@ If nil, show context only when the outmost parent is invisible."
   :type 'string
   :group 'treesitter-context)
 
+(defcustom treesitter-context-frame-font-fraction nil
+  "Fraction of font height in the child frame. Prefer this to `treesitter-context-frame-font'."
+  :version "29.1"
+  :type 'float
+  :safe 'floatp
+  :group 'treesitter-context)
+
 (defvar treesitter-context--buffer-name "*treesitter-context*"
   "Name of buffer used to show context.")
 
@@ -142,6 +149,7 @@ See `posframe-show' for more infor about hidehandler and INFO ."
          (line-no-prefix "")
          (blank-prefix "")
          (padding "  ")
+         (font-height (face-attribute 'default :height))
          first-line-p)
     (when treesitter-context-show-line-number
       (cl-dolist (context contexts)
@@ -165,6 +173,11 @@ See `posframe-show' for more infor about hidehandler and INFO ."
         (cl-dolist (context contexts)
           (cl-dolist (line (cdr context))
             (insert line)))))
+    (when (and font-height
+               treesitter-context-frame-font-fraction
+               (> treesitter-context-frame-font-fraction 0.0))
+      (setq treesitter-context-frame-font nil)
+      (setq font-height (round (* font-height treesitter-context-frame-font-fraction))))
     (setq treesitter-context--child-frame (posframe-show buffer
                                                          :poshandler #'posframe-poshandler-window-top-right-corner
                                                          :font treesitter-context-frame-font
@@ -176,7 +189,9 @@ See `posframe-show' for more infor about hidehandler and INFO ."
                                                          :min-height treesitter-context-frame-min-height
                                                          :accept-focus nil
                                                          :hidehandler #'treesitter-context--posframe-hidehandler-when-buffer-change
-                                                         :timeout treesitter-context-frame-autohide-timeout)))
+                                                         :timeout treesitter-context-frame-autohide-timeout))
+    (when font-height
+      (set-face-attribute 'default treesitter-context--child-frame :height font-height)))
   nil)
 
 (defun treesitter-context--refresh-context ()
