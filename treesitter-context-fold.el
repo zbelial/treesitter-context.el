@@ -24,6 +24,8 @@
 ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 (require 'treesitter-context-common)
+(eval-when-compile
+  (require 'treesitter-context-utils))
 
 (defface treesitter-context-fold-ellipsis-face
   '()
@@ -105,21 +107,23 @@
 (defun treesitter-context-fold-hide ()
   "Fold current code node."
   (interactive)
-  (when-let ((region (treesitter-context-fold-get-region)))
-    (let ((beg (nth 0 region))
-          (end (nth 1 region)))
-      (let ((overlays (treesitter-context-fold--get-exact-overlays beg end)))
-        ;; If there are overlays with the same region, don't try to fold again.
-        (unless overlays
-          (setq overlays (treesitter-context-fold--hide-region beg end)))
-        overlays))))
+  (treesitter-context--when-available
+    (when-let ((region (treesitter-context-fold-get-region)))
+      (let ((beg (nth 0 region))
+            (end (nth 1 region)))
+        (let ((overlays (treesitter-context-fold--get-exact-overlays beg end)))
+          ;; If there are overlays with the same region, don't try to fold again.
+          (unless overlays
+            (setq overlays (treesitter-context-fold--hide-region beg end)))
+          overlays)))))
 
 ;;;###autoload
 (defun treesitter-context-fold-show ()
   "Unfold current code node."
   (interactive)
-  (treesitter-context-fold--show-region (line-beginning-position)
-                                        (1+ (line-end-position))))
+  (treesitter-context--when-available
+    (treesitter-context-fold--show-region (line-beginning-position)
+                                          (1+ (line-end-position)))))
 
 ;;;###autoload
 (defun treesitter-context-fold-toggle ()
@@ -134,14 +138,15 @@
 (defun treesitter-context-fold-debug ()
   "Show debug info."
   (interactive)
-  (let ((region (treesitter-context-fold-get-region)))
-    (if region
-        (message "region: %s" region)
-      ;; (progn
-      ;;   (message "start: %s" (nth 0 region))
-      ;;   (message "end:   %s" (nth 1 region))
-      ;;   (message "node:  %s" (nth 2 region)))
-      (message "No valid region here."))))
+  (treesitter-context--when-available
+    (let ((region (treesitter-context-fold-get-region)))
+      (if region
+          (message "region: %s" region)
+        ;; (progn
+        ;;   (message "start: %s" (nth 0 region))
+        ;;   (message "end:   %s" (nth 1 region))
+        ;;   (message "node:  %s" (nth 2 region)))
+        (message "No valid region here.")))))
 
 ;;;###autoload
 (defvar treesitter-context-fold-mode-map
