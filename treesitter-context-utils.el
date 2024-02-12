@@ -41,4 +41,12 @@
      (message "Current major mode is not supported by treesitter-context.")
      nil))
 
+;;;###autoload
+(defmacro treesitter-context--when-available-quiet (&rest body)
+  "Run BODY only if treesit is available and current major mode is supported."
+  (declare (indent 0))
+  `(when (and (treesit-available-p)
+              (member major-mode treesitter-context--supported-mode))
+     (progn ,@body)))
+
 (provide 'treesitter-context-utils)
