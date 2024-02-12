@@ -44,7 +44,7 @@
       (set-mark node-end)
       (goto-char node-start))))
 
-(eval-after-load 'expand-region
+(with-eval-after-load 'expand-region
   (add-to-list 'er/try-expand-list 'treesitter-context-mark-bigger-node))
 
 (provide 'treesitter-context-expand)
