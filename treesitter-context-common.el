@@ -45,7 +45,7 @@ The car of the pair is context, and the cdr is context.end."
         first
         second
         third)
-    (setq captures (treesit-query-capture node query (treesit-node-start node) (point)))
+    (setq captures (treesit-query-capture node query (or beg (treesit-node-start node)) (or end (1+ (point)))))
     (when captures
       (setq index 0)
       (setq total (length captures))
@@ -116,8 +116,7 @@ The car of the pair is context, and the cdr is context.end."
   "Collect all of current node's parent nodes with node-type in NODE-TYPES.
 Use QUERY-PATTERNS to capture potential nodes.
 Each node is indented according to INDENT-OFFSET."
-  (let* ((node (treesit-node-at (point)))
-         (parents (treesitter-context--parent-nodes node-types))
+  (let* ((parents (treesitter-context--parent-nodes node-types))
          (root (nth 0 parents))
          root-start
          groups
@@ -129,7 +128,7 @@ Each node is indented according to INDENT-OFFSET."
       (setq root-start (treesit-node-start root))
       (when (or treesitter-context-show-context-always
                 (> (window-start) root-start))
-        (setq groups (treesitter-context--capture root query-patterns (treesit-node-start root) (point)))
+        (setq groups (treesitter-context--capture root query-patterns (treesit-node-start root) (1+ (point))))
         (when groups
           (setq node-pairs (seq-filter (lambda (group) (member (cdr (nth 0 group)) parents)) groups))
           (when node-pairs
