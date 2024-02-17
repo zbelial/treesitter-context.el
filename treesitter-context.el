@@ -212,6 +212,7 @@ See `posframe-show' for more infor about hidehandler and INFO ."
 (defun treesitter-context--hide-frame ()
   (posframe-hide (get-buffer treesitter-context--buffer-name)))
 
+;;;###autoload
 (define-minor-mode treesitter-context-mode
   "Show context information in treesit-based mode."
   :init-value nil
