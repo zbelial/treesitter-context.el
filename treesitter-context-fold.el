@@ -160,11 +160,8 @@
   :init-value nil
   :keymap treesitter-context-fold-mode-map
   (if treesitter-context-fold-mode
-      (progn
-        (unless (and (treesit-available-p)
-                     (member major-mode treesitter-context--supported-mode))
-          (message "treesitter context fold mode cannot be enabled.")
-          (treesitter-context-fold-mode -1)))
-    (treesitter-context-fold -1)))
+      (unless (and (treesit-available-p) (member major-mode treesitter-context--supported-mode))
+        (message "Treesitter context fold mode cannot be enabled.")
+        (setq treesitter-context-fold-mode nil))))
 
 (provide 'treesitter-context-fold)
