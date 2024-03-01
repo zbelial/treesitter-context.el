@@ -161,11 +161,22 @@
   :init-value nil
   :keymap treesitter-context-fold-mode-map
   (if treesitter-context-fold-mode
-      (progn
-        (unless (and (treesit-available-p)
-                     (member major-mode treesitter-context--supported-mode))
-          (message "treesitter context fold mode cannot be enabled.")
-          (treesitter-context-fold-mode -1)))
-    (treesitter-context-fold -1)))
+      (unless (and (treesit-available-p) (member major-mode treesitter-context--supported-mode))
+        (message "Treesitter context fold mode cannot be enabled.")
+        (setq treesitter-context-fold-mode nil))))
+
+
+;; Register code folding functions for better `evil-mode' integration
+(defvar evil-fold-list) ;; Make the byte-compiler happy
+(with-eval-after-load 'evil
+  (add-to-list 'evil-fold-list
+               `((treesitter-context-fold-mode)
+                 :open       treesitter-context-fold-show
+                 :open-all   nil
+                 :close      treesitter-context-fold-hide
+                 :close-all  nil
+                 :toggle     treesitter-context-fold-toggle
+                 :delete     nil
+                 :open-rec   nil)))
 
 (provide 'treesitter-context-fold)
