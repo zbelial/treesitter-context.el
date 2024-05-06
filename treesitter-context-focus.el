@@ -103,11 +103,11 @@ The overlays pointed to by `treesitter-context-focus-pre-overlay',
   (if treesitter-context-focus-mode
       (progn
         (if (and (treesit-available-p)
-                 (posframe-workable-p)
                  (member major-mode treesitter-context--focus-supported-mode))
             (progn
               (treesitter-context-focus-init))
-          (setq treesitter-context-focus-mode nil)))
+          (setq treesitter-context-focus-mode nil)
+          (message "treesitter-context-focus-mode cannot be enabled.")))
     (treesitter-context-focus-terminate)))
 
 

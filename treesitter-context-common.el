@@ -14,6 +14,10 @@
 (defvar treesitter-context--focus-supported-mode nil
   "Major modes that are support by `treesitter-context-focus-mode'.")
 
+(defvar treesitter-context--which-func-supported-mode nil
+  "Major modes that are support by treesitter-context which-func.")
+
+;;; general
 (defun treesitter-context--color-blend (c1 c2 alpha)
   "Blend two colors C1 and C2 with ALPHA. C1 and C2 are hexidecimal strings.
 ALPHA is a number between 0.0 and 1.0 which corresponds to the influence of C1 on the result."
@@ -41,6 +45,7 @@ ALPHA is a number between 0.0 and 1.0 which corresponds to the influence of C1 o
           (setq node (treesit-node-parent node)))
         parents))))
 
+;;; context
 (defun treesitter-context--capture (node query &optional beg end node-only)
   "Capture nodes and return them as a pair.
 The car of the pair is context, and the cdr is context.end."
@@ -82,7 +87,6 @@ The car of the pair is context, and the cdr is context.end."
       (setq result (nreverse result)))
     result))
 
-;; not used yet
 (defun treesitter-context--indent-context (context level offset)
   (let ((lines (string-split context "\n" t))
         (indentation (make-string (* level offset) ?\s))
@@ -92,6 +96,7 @@ The car of the pair is context, and the cdr is context.end."
         (cl-pushnew (concat indentation line "\n") result)))
     (nreverse result)))
 
+;; not used yet
 (defun treesitter-context--cut-context (beg end)
   (let ((beg-line-no (line-number-at-pos beg))
         (end-line-no (line-number-at-pos end))
@@ -183,6 +188,7 @@ Each node is indented according to INDENT-OFFSET."
   (treesitter-context--indent-context context indent-level indent-offset))
 
 
+;;; focus
 (defun treesitter-context--focus-bounds (node-types)
   (let ((node (treesit-node-at (point)))
         result
@@ -205,6 +211,7 @@ Each node is indented according to INDENT-OFFSET."
   "Return the bound that should be focused."
   (user-error "%s is not supported by treesitter-context-focus." major-mode))
 
+;;; fold
 (defun treesitter-context-fold--get-region-base (node-types)
   "Get current code node's region."
   (let ((node (treesit-node-at (point)))
@@ -238,5 +245,11 @@ Each node is indented according to INDENT-OFFSET."
 (cl-defgeneric treesitter-context-fold-get-region ()
   "Get current code node's region."
   (user-error "%s is not supported by treesitter-context-fold." major-mode))
+
+;;; which-func
+(cl-defgeneric treesitter-context-which-func-function ()
+  "A treesitter-based which-func function."
+  nil)
+
 
 (provide 'treesitter-context-common)
