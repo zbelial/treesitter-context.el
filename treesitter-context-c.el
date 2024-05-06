@@ -81,5 +81,7 @@
         (list start new-end node))))))
 
 (add-to-list 'treesitter-context--supported-mode 'c-ts-mode t)
+(add-to-list 'treesitter-context--fold-supported-mode 'c-ts-mode t)
+(add-to-list 'treesitter-context--focus-supported-mode 'c-ts-mode t)
 
 (provide 'treesitter-context-c)

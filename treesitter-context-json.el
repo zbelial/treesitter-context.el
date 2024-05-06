@@ -21,5 +21,6 @@
   (treesitter-context--focus-bounds treesitter-context--json-focus-node-types))
 
 (add-to-list 'treesitter-context--supported-mode 'json-ts-mode t)
+(add-to-list 'treesitter-context--focus-supported-mode 'json-ts-mode t)
 
 (provide 'treesitter-context-json)

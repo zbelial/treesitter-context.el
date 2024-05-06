@@ -32,11 +32,21 @@
     )))
 
 ;;;###autoload
+(defmacro treesitter-context--when-fold-available (&rest body)
+  "Run BODY only if treesit is available and current major mode is supported."
+  (declare (indent 0))
+  `(if (and (treesit-available-p)
+            (member major-mode treesitter-context--fold-supported-mode))
+       (progn ,@body)
+     (message "Current major mode is not supported by treesitter-context-fold.")
+     nil))
+
+;;;###autoload
 (defmacro treesitter-context--when-available (&rest body)
   "Run BODY only if treesit is available and current major mode is supported."
   (declare (indent 0))
   `(if (and (treesit-available-p)
-            (member major-mode treesitter-context--supported-mode))
+            (member major-mode treesitter-context--fold-supported-mode))
        (progn ,@body)
      (message "Current major mode is not supported by treesitter-context.")
      nil))

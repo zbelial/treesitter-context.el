@@ -121,5 +121,7 @@
         (list start new-end node))))))
 
 (add-to-list 'treesitter-context--supported-mode 'java-ts-mode t)
+(add-to-list 'treesitter-context--fold-supported-mode 'java-ts-mode t)
+(add-to-list 'treesitter-context--focus-supported-mode 'java-ts-mode t)
 
 (provide 'treesitter-context-java)

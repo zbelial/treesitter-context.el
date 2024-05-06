@@ -33,5 +33,7 @@
             (1- (nth 1 region))))))
 
 (add-to-list 'treesitter-context--supported-mode 'toml-ts-mode t)
+(add-to-list 'treesitter-context--fold-supported-mode 'toml-ts-mode t)
+(add-to-list 'treesitter-context--focus-supported-mode 'toml-ts-mode t)
 
 (provide 'treesitter-context-toml)

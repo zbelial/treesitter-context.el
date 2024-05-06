@@ -21,5 +21,6 @@
   (treesitter-context--focus-bounds treesitter-context--yaml-focus-node-types))
 
 (add-to-list 'treesitter-context--supported-mode 'yaml-ts-mode t)
+(add-to-list 'treesitter-context--focus-supported-mode 'yaml-ts-mode t)
 
 (provide 'treesitter-context-yaml)

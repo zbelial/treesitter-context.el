@@ -59,5 +59,7 @@
   (treesitter-context-fold--get-region-base treesitter-context--go-fold-node-types))
 
 (add-to-list 'treesitter-context--supported-mode 'go-ts-mode t)
+(add-to-list 'treesitter-context--fold-supported-mode 'go-ts-mode t)
+(add-to-list 'treesitter-context--focus-supported-mode 'go-ts-mode t)
 
 (provide 'treesitter-context-go)

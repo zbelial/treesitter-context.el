@@ -6,7 +6,13 @@
 (require 'seq)
 
 (defvar treesitter-context--supported-mode nil
-  "Major modes that are support by treesitter-context.")
+  "Major modes that are support by `treesitter-context-mode'.")
+
+(defvar treesitter-context--fold-supported-mode nil
+  "Major modes that are support by `treesitter-context-fold-mode'.")
+
+(defvar treesitter-context--focus-supported-mode nil
+  "Major modes that are support by `treesitter-context-focus-mode'.")
 
 (defun treesitter-context--color-blend (c1 c2 alpha)
   "Blend two colors C1 and C2 with ALPHA. C1 and C2 are hexidecimal strings.

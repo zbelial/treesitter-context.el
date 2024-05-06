@@ -70,5 +70,7 @@
         (list start (1- end) node))))))
 
 (add-to-list 'treesitter-context--supported-mode 'rust-ts-mode t)
+(add-to-list 'treesitter-context--fold-supported-mode 'rust-ts-mode t)
+(add-to-list 'treesitter-context--focus-supported-mode 'rust-ts-mode t)
 
 (provide 'treesitter-context-rust)
