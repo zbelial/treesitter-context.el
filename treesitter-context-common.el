@@ -14,9 +14,6 @@
 (defvar treesitter-context--focus-supported-mode nil
   "Major modes that are support by `treesitter-context-focus-mode'.")
 
-(defvar treesitter-context--which-func-supported-mode nil
-  "Major modes that are support by treesitter-context which-func.")
-
 ;;; general
 (defun treesitter-context--color-blend (c1 c2 alpha)
   "Blend two colors C1 and C2 with ALPHA. C1 and C2 are hexidecimal strings.
@@ -245,11 +242,6 @@ Each node is indented according to INDENT-OFFSET."
 (cl-defgeneric treesitter-context-fold-get-region ()
   "Get current code node's region."
   (user-error "%s is not supported by treesitter-context-fold." major-mode))
-
-;;; which-func
-(cl-defgeneric treesitter-context-which-func-function ()
-  "A treesitter-based which-func function."
-  nil)
 
 
 (provide 'treesitter-context-common)
