@@ -69,9 +69,46 @@
        (t
         (list start (1- end) node))))))
 
+;;; which-func 
+(defconst treesitter-context--rust-which-func-node-types '("function_item" "impl_item" "trait_item" "mod_item" "struct_item" "enum_item")
+  "Node types that which-func cares about.")
+
+(defun treesitter-context--rust-which-func-name (node)
+  (let ((node-type (treesit-node-type node))
+        name-node)
+    (cond
+     ((string-equal node-type "impl_item")
+      (let (trait-node
+            type-node
+            trait
+            type)
+        (setq type-node (treesit-node-child-by-field-name node "type"))
+        (setq trait-node (treesit-node-child-by-field-name node "trait"))
+        (if trait-node
+            (concat
+             (buffer-substring-no-properties (treesit-node-start trait-node) (treesit-node-end trait-node))
+             " for "
+             (buffer-substring-no-properties (treesit-node-start type-node) (treesit-node-end type-node)))
+          (buffer-substring-no-properties (treesit-node-start type-node) (treesit-node-end type-node)))))
+     ((member node-type '("function_item" "trait_item" "mod_item" "struct_item" "enum_item"))
+      (setq name-node (treesit-node-child-by-field-name node "name"))
+      (when name-node
+        (buffer-substring-no-properties (treesit-node-start name-node) (treesit-node-end name-node))))
+     (t
+      ""))))
+
+(cl-defmethod treesitter-context-which-func-function (&context (major-mode rust-ts-mode))
+  (let ((parents (treesitter-context--parent-nodes treesitter-context--rust-which-func-node-types))
+        which-func
+        node
+        node-name)
+    (when parents
+      (mapconcat #'treesitter-context--rust-which-func-name parents "."))))
+
 ;;; supported mode
 (add-to-list 'treesitter-context--supported-mode 'rust-ts-mode t)
 (add-to-list 'treesitter-context--fold-supported-mode 'rust-ts-mode t)
 (add-to-list 'treesitter-context--focus-supported-mode 'rust-ts-mode t)
+(add-to-list 'treesitter-context--which-func-supported-mode 'rust-ts-mode t)
 
 (provide 'treesitter-context-rust)

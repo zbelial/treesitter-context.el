@@ -120,9 +120,39 @@
        (t
         (list start new-end node))))))
 
+
+;;; which-func
+(defconst treesitter-context--java-which-func-node-types '("class_declaration" 
+                                                           "method_declaration")
+  "Node types that which-func cares about.")
+
+(defun treesitter-context--java-which-func-name (node)
+  (let ((node-type (treesit-node-type node))
+        name-node)
+    (cond
+     ((string-equal node-type "class_declaration")
+      (setq name-node (treesit-node-child-by-field-name node "name"))
+      (when name-node
+        (buffer-substring-no-properties (treesit-node-start name-node) (treesit-node-end name-node))))
+     ((string-equal node-type "method_declaration")
+      (setq name-node (treesit-node-child-by-field-name node "name"))
+      (when name-node
+        (buffer-substring-no-properties (treesit-node-start name-node) (treesit-node-end name-node))))
+     (t
+      ""))))
+
+(cl-defmethod treesitter-context-which-func-function (&context (major-mode java-ts-mode))
+  (let ((parents (treesitter-context--parent-nodes treesitter-context--java-which-func-node-types))
+        which-func
+        node
+        node-name)
+    (when parents
+      (mapconcat #'treesitter-context--java-which-func-name parents "."))))
+
 ;;; supported mode
 (add-to-list 'treesitter-context--supported-mode 'java-ts-mode t)
 (add-to-list 'treesitter-context--fold-supported-mode 'java-ts-mode t)
 (add-to-list 'treesitter-context--focus-supported-mode 'java-ts-mode t)
+(add-to-list 'treesitter-context--which-func-supported-mode 'java-ts-mode t)
 
 (provide 'treesitter-context-java)
