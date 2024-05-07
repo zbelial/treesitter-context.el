@@ -36,7 +36,7 @@
 ;;;###autoload
 (define-minor-mode treesitter-context-which-func-mode
   "Enable treesitter-based which-func."
-  :global nil
+  :global t
   :init-value nil
   :keymap treesitter-context-which-func-mode-map
   (if treesitter-context-which-func-mode
