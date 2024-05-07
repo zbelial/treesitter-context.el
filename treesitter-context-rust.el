@@ -86,14 +86,14 @@
         (setq trait-node (treesit-node-child-by-field-name node "trait"))
         (if trait-node
             (concat
-             (buffer-substring-no-properties (treesit-node-start trait-node) (treesit-node-end trait-node))
+             (treesit-node-text trait-node)
              " for "
-             (buffer-substring-no-properties (treesit-node-start type-node) (treesit-node-end type-node)))
-          (buffer-substring-no-properties (treesit-node-start type-node) (treesit-node-end type-node)))))
+             (treesit-node-text type-node))
+          (treesit-node-text type-node))))
      ((member node-type '("function_item" "trait_item" "mod_item" "struct_item" "enum_item"))
       (setq name-node (treesit-node-child-by-field-name node "name"))
       (when name-node
-        (buffer-substring-no-properties (treesit-node-start name-node) (treesit-node-end name-node))))
+        (treesit-node-text name-node)))
      (t
       ""))))
 

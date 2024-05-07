@@ -130,14 +130,10 @@
   (let ((node-type (treesit-node-type node))
         name-node)
     (cond
-     ((string-equal node-type "class_declaration")
+     ((member node-type '("class_declaration" "method_declaration"))
       (setq name-node (treesit-node-child-by-field-name node "name"))
       (when name-node
-        (buffer-substring-no-properties (treesit-node-start name-node) (treesit-node-end name-node))))
-     ((string-equal node-type "method_declaration")
-      (setq name-node (treesit-node-child-by-field-name node "name"))
-      (when name-node
-        (buffer-substring-no-properties (treesit-node-start name-node) (treesit-node-end name-node))))
+        (treesit-node-text name-node)))
      (t
       ""))))
 
