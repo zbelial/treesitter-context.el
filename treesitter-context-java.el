@@ -133,17 +133,12 @@
      ((member node-type '("class_declaration" "method_declaration"))
       (setq name-node (treesit-node-child-by-field-name node "name"))
       (when name-node
-        (treesit-node-text name-node)))
+        (treesit-node-text name-node t)))
      (t
       ""))))
 
 (cl-defmethod treesitter-context-which-func-function (&context (major-mode java-ts-mode))
-  (let ((parents (treesitter-context--parent-nodes treesitter-context--java-which-func-node-types))
-        which-func
-        node
-        node-name)
-    (when parents
-      (mapconcat #'treesitter-context--java-which-func-name parents "."))))
+  (treesitter-context--which-func-function-base treesitter-context--java-which-func-node-types #'treesitter-context--java-which-func-name))
 
 ;;; supported mode
 (add-to-list 'treesitter-context--supported-mode 'java-ts-mode t)

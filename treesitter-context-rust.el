@@ -86,24 +86,19 @@
         (setq trait-node (treesit-node-child-by-field-name node "trait"))
         (if trait-node
             (concat
-             (treesit-node-text trait-node)
+             (treesit-node-text trait-node t)
              " for "
-             (treesit-node-text type-node))
-          (treesit-node-text type-node))))
+             (treesit-node-text type-node t))
+          (treesit-node-text type-node t))))
      ((member node-type '("function_item" "trait_item" "mod_item" "struct_item" "enum_item"))
       (setq name-node (treesit-node-child-by-field-name node "name"))
       (when name-node
-        (treesit-node-text name-node)))
+        (treesit-node-text name-node t)))
      (t
       ""))))
 
 (cl-defmethod treesitter-context-which-func-function (&context (major-mode rust-ts-mode))
-  (let ((parents (treesitter-context--parent-nodes treesitter-context--rust-which-func-node-types))
-        which-func
-        node
-        node-name)
-    (when parents
-      (mapconcat #'treesitter-context--rust-which-func-name parents "."))))
+  (treesitter-context--which-func-function-base treesitter-context--rust-which-func-node-types #'treesitter-context--rust-which-func-name))
 
 ;;; supported mode
 (add-to-list 'treesitter-context--supported-mode 'rust-ts-mode t)

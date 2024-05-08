@@ -53,8 +53,28 @@
   "Get current code node's region."
   (treesitter-context-fold--get-region-base treesitter-context--python-fold-node-types))
 
+;;; which-func
+(defconst treesitter-context--python-which-func-node-types '("class_definition" "function_definition")
+  "Node types that which-func cares about")
+
+(defun treesitter-context--python-which-func-name (node)
+  (let ((node-type (treesit-node-type node))
+        name-node)
+    (cond
+     ((member node-type '("class_definition" "function_definition"))
+      (setq name-node (treesit-node-child-by-field-name node "name"))
+      (when name-node
+        (treesit-node-text name-node t)))
+     (t
+      ""))))
+
+(cl-defmethod treesitter-context-which-func-function (&context (major-mode python-ts-mode))
+  (treesitter-context--which-func-function-base treesitter-context--python-which-func-node-types #'treesitter-context--python-which-func-name))
+
+;;; supported mode
 (add-to-list 'treesitter-context--supported-mode 'python-ts-mode t)
 (add-to-list 'treesitter-context--fold-supported-mode 'python-ts-mode t)
 (add-to-list 'treesitter-context--focus-supported-mode 'python-ts-mode t)
+(add-to-list 'treesitter-context--which-func-supported-mode 'python-ts-mode t)
 
 (provide 'treesitter-context-python)

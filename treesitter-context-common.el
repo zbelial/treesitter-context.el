@@ -251,5 +251,9 @@ Each node is indented according to INDENT-OFFSET."
   "A treesitter-based which-func function."
   nil)
 
+(defun treesitter-context--which-func-function-base (node-types transformer)
+  (let ((parents (treesitter-context--parent-nodes node-types)))
+    (when parents
+      (mapconcat (lambda (n) (funcall transformer n)) parents "."))))
 
 (provide 'treesitter-context-common)
