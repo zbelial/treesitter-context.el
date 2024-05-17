@@ -26,8 +26,6 @@
                                    (match_statement body: (_) @context.end) @context))
   "Query patterns to capture desired nodes.")
 
-(defconst treesitter-context--python-focus-node-types '("class_definition" "function_definition" "try_statement" "with_statement" "if_statement" "elif_clause" "else_clause" "case_clause" "while_statement" "match_statement" "for_statement")
-  "Node types that may be focused.")
 
 (cl-defmethod treesitter-context-collect-contexts (&context (major-mode python-ts-mode))
   "Collect all of current node's parent nodes."
@@ -42,10 +40,15 @@
       (setq treesitter-context--indent-level indent-level)
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
+;;; focus
+(defconst treesitter-context--python-focus-node-types '("class_definition" "function_definition" "try_statement" "with_statement" "if_statement" "elif_clause" "else_clause" "case_clause" "while_statement" "match_statement" "for_statement")
+  "Node types that may be focused.")
+
 (cl-defmethod treesitter-context-focus-bounds (&context (major-mode python-ts-mode))
   "Return the bound that should be focused."
   (treesitter-context--focus-bounds treesitter-context--python-focus-node-types))
 
+;;; fold
 (defconst treesitter-context--python-fold-node-types '("class_definition" "function_definition" "try_statement" "with_statement" "if_statement" "elif_clause" "else_clause" "case_clause" "while_statement" "match_statement" "for_statement")
   "Node types that may be folded.")
 

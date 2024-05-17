@@ -44,6 +44,7 @@
       (setq treesitter-context--indent-level indent-level)
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
+;;; focus
 (defconst treesitter-context--c-focus-node-types '("preproc_if" "preproc_ifdef" "preproc_else" "function_definition" "for_statement" "if_statement" "else_clause" "while_statement" "do_statement" "struct_specifier" "enum_specifier" "switch_statement" "case_statement")
   "Node types that may be focused.")
 
@@ -51,6 +52,7 @@
   "Return the bound that should be focused."
   (treesitter-context--focus-bounds treesitter-context--c-focus-node-types))
 
+;;; fold
 (defconst treesitter-context--c-fold-node-types '("preproc_if" "preproc_ifdef" "preproc_else" "function_definition" "for_statement" "if_statement" "else_clause" "while_statement" "do_statement" "struct_specifier" "switch_statement")
   "Node types that may be folded.")
 

@@ -67,6 +67,7 @@
       (setq treesitter-context--indent-level indent-level)
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
+;;; focus
 (defconst treesitter-context--java-focus-node-types '("if_statement"
                                                       "for_statement"
                                                       "enhanced_for_statement"
@@ -79,7 +80,7 @@
   "Return the bound that should be focused."
   (treesitter-context--focus-bounds treesitter-context--java-focus-node-types))
 
-
+;;; fold
 (defconst treesitter-context--java-fold-node-types '("if_statement"
                                                      "for_statement"
                                                      "enhanced_for_statement"

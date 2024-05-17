@@ -39,6 +39,7 @@
       (setq treesitter-context--indent-level indent-level)
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
+;;; focus
 (defconst treesitter-context--javascript-focus-node-types '("if_statement" "else_clause" "for_statement" "for_in_statement" "while_statement" "class_declaration" "class" "function" "arrow_function" "function_declaration" "generator_function_declaration" "method_definition" "switch_statement" "switch_case" "switch_default")
   "Node types that may be focused.")
 
@@ -46,6 +47,7 @@
   "Return the bound that should be focused."
   (treesitter-context--focus-bounds treesitter-context--javascript-focus-node-types))
 
+;;; fold
 (defconst treesitter-context--javascript-fold-node-types '("if_statement" "else_clause" "for_statement" "for_in_statement" "while_statement" "class_declaration" "arrow_function" "function_declaration" "generator_function_declaration" "method_definition" "switch_statement" "switch_case" "switch_default")
   "Node types that may be folded.")
 
@@ -66,8 +68,28 @@
        (t
         (list start (1- end) node))))))
 
+;;; which-func
+(defconst treesitter-context--javascript-which-func-node-types '("class_declaration" "class" "function_declaration" "method_definition")
+  "Node types that which-func cares about.")
+
+(defun treesitter-context--javascript-which-func-name (node)
+  (let ((node-type (treesit-node-type node))
+        name-node)
+    (cond
+     ((member node-type '("class_declaration" "class" "function_declaration" "method_definition"))
+      (setq name-node (treesit-node-child-by-field-name node "name"))
+      (when name-node
+        (treesit-node-text name-node t)))
+     (t
+      ""))))
+
+(cl-defmethod treesitter-context-which-func-function (&context (major-mode js-ts-mode))
+  (treesitter-context--which-func-function-base treesitter-context--javascript-which-func-node-types #'treesitter-context--javascript-which-func-name))
+
+;;; supported mode
 (add-to-list 'treesitter-context--supported-mode 'js-ts-mode t)
 (add-to-list 'treesitter-context--fold-supported-mode 'js-ts-mode t)
 (add-to-list 'treesitter-context--focus-supported-mode 'js-ts-mode t)
+(add-to-list 'treesitter-context--which-func-supported-mode 'js-ts-mode t)
 
 (provide 'treesitter-context-javascript)

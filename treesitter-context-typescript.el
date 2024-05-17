@@ -42,6 +42,7 @@
       (setq treesitter-context--indent-level indent-level)
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
+;;; focus
 (defconst treesitter-context--typescript-focus-node-types '("if_statement" "else_clause" "for_statement" "for_in_statement" "while_statement" "class_declaration" "class" "function" "arrow_function" "function_declaration" "generator_function_declaration" "method_definition" "switch_statement" "switch_case" "switch_default" "pair" "internal_module" "enum_declaration" "enum_assignment")
   "Node types that may be showed.")
 
@@ -49,6 +50,7 @@
   "Return the bound that should be focused."
   (treesitter-context--focus-bounds treesitter-context--typescript-focus-node-types))
 
+;;; fold
 (defconst treesitter-context--typescript-fold-node-types '("if_statement" "else_clause" "for_statement" "for_in_statement" "while_statement" "class_declaration" "arrow_function" "function_declaration" "generator_function_declaration" "method_definition" "switch_statement" "switch_case" "switch_default" "internal_module" "enum_declaration" "enum_assignment")
   "Node types that may be folded.")
 
