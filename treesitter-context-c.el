@@ -91,11 +91,11 @@
         name-node)
     (cond
      ((member node-type '("function_definition"))
-      (setq name-node (treesit-node-child-by-field-name node "declarator"))
-      (when name-node
-        (setq name-node (treesit-node-child-by-field-name name-node "declarator"))
-        (when name-node
-          (treesit-node-text name-node t))))
+      (when-let ((function-declarator (treesit-search-subtree node
+                                                              (lambda (n) (equal (treesit-node-type n) "function_declarator"))
+                                                              nil t)))
+        (when-let ((declarator (treesit-node-child-by-field-name function-declarator "declarator")))
+          (treesit-node-text declarator t))))
      (t
       ""))))
 

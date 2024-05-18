@@ -2,7 +2,7 @@
 
 (require 'treesitter-context-common)
 
-(defconst treesitter-context--c++-node-types '("preproc_if" "preproc_ifdef" "preproc_else" "function_definition" "for_statement" "if_statement" "else_clause" "while_statement" "do_statement" "struct_specifier" "enum_specifier" "for_range_loop" "class_specifier" "linkage_specification" "switch_statement" "case_statement")
+(defconst treesitter-context--c++-node-types '("preproc_if" "preproc_ifdef" "preproc_else" "function_definition" "for_statement" "if_statement" "else_clause" "while_statement" "do_statement" "struct_specifier" "enum_specifier" "for_range_loop" "class_specifier" "namespace_definition" "linkage_specification" "switch_statement" "case_statement")
   "Node types that may be showed.")
 
 (defconst treesitter-context--c++-query
@@ -23,6 +23,7 @@
                                 (struct_specifier body: (_) @context.end) @context
                                 (enum_specifier body: (_) @context.end) @context    
                                 (for_range_loop body: (_) @context.end) @context
+                                (namespace_definition body: (_) @context.end) @context
                                 (class_specifier body: (_) @context.end) @context
                                 (linkage_specification body: (declaration_list (_) @context.end)) @context
                                 ))
@@ -41,6 +42,7 @@
       (setq treesitter-context--indent-level indent-level)
       (treesitter-context--indent-context context treesitter-context--indent-level indent-offset))))
 
+;;; focus
 (defconst treesitter-context--c++-focus-node-types '("preproc_if" "preproc_ifdef" "preproc_else" "function_definition" "for_statement" "if_statement" "else_clause" "while_statement" "do_statement" "struct_specifier" "enum_specifier" "for_range_loop" "class_specifier" "linkage_specification" "switch_statement" "case_statement")
   "Node types that may be focused.")
 
@@ -48,6 +50,7 @@
   "Return the bound that should be focused."
   (treesitter-context--focus-bounds treesitter-context--c++-focus-node-types))
 
+;;; fold
 (defconst treesitter-context--c++-fold-node-types '("preproc_if" "preproc_ifdef" "preproc_else" "function_definition" "for_statement" "if_statement" "else_clause" "while_statement" "do_statement" "struct_specifier" "for_range_loop" "class_specifier" "linkage_specification" "switch_statement" "case_statement")
   "Node types that may be folded.")
 
@@ -70,8 +73,37 @@
             (list start (1- end) node)
           (list start end node)))))))
 
+;;; which-func
+(defconst treesitter-context--c++-which-func-node-types '("namespace_definition" "function_definition" "struct_specifier" "class_specifier")
+  "Node types that which-func cares about.")
+
+(defun treesitter-context--c++-which-func-name (node)
+  (let ((node-type (treesit-node-type node)))
+    (cond
+     ((member node-type '("namespace_definition"))
+      (when-let ((name-node (treesit-node-child-by-field-name node "name")))
+        (treesit-node-text name-node t)))
+     ((member node-type '("function_definition"))
+      (when-let ((function-declarator (treesit-search-subtree node
+                                                              (lambda (n) (equal (treesit-node-type n) "function_declarator"))
+                                                              nil t)))
+        (when-let ((declarator (treesit-node-child-by-field-name function-declarator "declarator")))
+          (treesit-node-text declarator t))))
+     ((member node-type '("class_specifier" "struct_specifier"))
+      (when-let ((name (treesit-search-subtree node
+                                               (lambda (n) (equal (treesit-node-type n) "type_identifier"))
+                                               nil t)))
+        (treesit-node-text name t)))
+     (t
+      ""))))
+
+(cl-defmethod treesitter-context-which-func-function (&context (major-mode c++-ts-mode))
+  (treesitter-context--which-func-function-base treesitter-context--c++-which-func-node-types #'treesitter-context--c++-which-func-name))
+
+;;; supported mode
 (add-to-list 'treesitter-context--supported-mode 'c++-ts-mode t)
 (add-to-list 'treesitter-context--fold-supported-mode 'c++-ts-mode t)
 (add-to-list 'treesitter-context--focus-supported-mode 'c++-ts-mode t)
+(add-to-list 'treesitter-context--which-func-supported-mode 'c++-ts-mode t)
 
 (provide 'treesitter-context-cpp)
