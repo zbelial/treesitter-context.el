@@ -68,28 +68,9 @@
        (t
         (list start (1- end) node))))))
 
-;;; which-func
-(defconst treesitter-context--javascript-which-func-node-types '("class_declaration" "class" "function_declaration" "method_definition")
-  "Node types that which-func cares about.")
-
-(defun treesitter-context--javascript-which-func-name (node)
-  (let ((node-type (treesit-node-type node))
-        name-node)
-    (cond
-     ((member node-type '("class_declaration" "class" "function_declaration" "method_definition"))
-      (setq name-node (treesit-node-child-by-field-name node "name"))
-      (when name-node
-        (treesit-node-text name-node t)))
-     (t
-      ""))))
-
-(cl-defmethod treesitter-context-which-func-function (&context (major-mode js-ts-mode))
-  (treesitter-context--which-func-function-base treesitter-context--javascript-which-func-node-types #'treesitter-context--javascript-which-func-name))
-
 ;;; supported mode
 (add-to-list 'treesitter-context--supported-mode 'js-ts-mode t)
 (add-to-list 'treesitter-context--fold-supported-mode 'js-ts-mode t)
 (add-to-list 'treesitter-context--focus-supported-mode 'js-ts-mode t)
-(add-to-list 'treesitter-context--which-func-supported-mode 'js-ts-mode t)
 
 (provide 'treesitter-context-javascript)

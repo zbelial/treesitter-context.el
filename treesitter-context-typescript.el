@@ -71,32 +71,9 @@
        (t
         (list start (1- end) node))))))
 
-;;; which-func
-(defconst treesitter-context--typescript-which-func-node-types '("internal_module" "class_declaration" "function_declaration" "method_definition" "enum_declaration")
-  "Node types that which-func cares about.")
-
-(defun treesitter-context--typescript-which-func-name (node)
-  (let ((node-type (treesit-node-type node))
-        name-node)
-    (cond
-     ((member node-type '("internal_module"))
-      (setq name-node (treesit-node-child node 1)) ;; fixme better way?
-      (when name-node
-        (treesit-node-text name-node t)))
-     ((member node-type '("class_declaration" "method_definition" "function_declaration" "enum_declaration"))
-      (setq name-node (treesit-node-child-by-field-name node "name"))
-      (when name-node
-        (treesit-node-text name-node t)))
-     (t
-      ""))))
-
-(cl-defmethod treesitter-context-which-func-function (&context (major-mode typescript-ts-mode))
-  (treesitter-context--which-func-function-base treesitter-context--typescript-which-func-node-types #'treesitter-context--typescript-which-func-name))
-
 ;;; supported mode
 (add-to-list 'treesitter-context--supported-mode 'typescript-ts-mode t)
 (add-to-list 'treesitter-context--fold-supported-mode 'typescript-ts-mode t)
 (add-to-list 'treesitter-context--focus-supported-mode 'typescript-ts-mode t)
-(add-to-list 'treesitter-context--which-func-supported-mode 'typescript-ts-mode t)
 
 (provide 'treesitter-context-typescript)

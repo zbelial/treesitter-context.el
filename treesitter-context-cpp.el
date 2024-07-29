@@ -73,37 +73,9 @@
             (list start (1- end) node)
           (list start end node)))))))
 
-;;; which-func
-(defconst treesitter-context--c++-which-func-node-types '("namespace_definition" "function_definition" "struct_specifier" "class_specifier")
-  "Node types that which-func cares about.")
-
-(defun treesitter-context--c++-which-func-name (node)
-  (let ((node-type (treesit-node-type node)))
-    (cond
-     ((member node-type '("namespace_definition"))
-      (when-let ((name-node (treesit-node-child-by-field-name node "name")))
-        (treesit-node-text name-node t)))
-     ((member node-type '("function_definition"))
-      (when-let ((function-declarator (treesit-search-subtree node
-                                                              (lambda (n) (equal (treesit-node-type n) "function_declarator"))
-                                                              nil t)))
-        (when-let ((declarator (treesit-node-child-by-field-name function-declarator "declarator")))
-          (treesit-node-text declarator t))))
-     ((member node-type '("class_specifier" "struct_specifier"))
-      (when-let ((name (treesit-search-subtree node
-                                               (lambda (n) (equal (treesit-node-type n) "type_identifier"))
-                                               nil t)))
-        (treesit-node-text name t)))
-     (t
-      ""))))
-
-(cl-defmethod treesitter-context-which-func-function (&context (major-mode c++-ts-mode))
-  (treesitter-context--which-func-function-base treesitter-context--c++-which-func-node-types #'treesitter-context--c++-which-func-name))
-
 ;;; supported mode
 (add-to-list 'treesitter-context--supported-mode 'c++-ts-mode t)
 (add-to-list 'treesitter-context--fold-supported-mode 'c++-ts-mode t)
 (add-to-list 'treesitter-context--focus-supported-mode 'c++-ts-mode t)
-(add-to-list 'treesitter-context--which-func-supported-mode 'c++-ts-mode t)
 
 (provide 'treesitter-context-cpp)

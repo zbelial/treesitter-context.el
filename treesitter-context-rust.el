@@ -69,41 +69,9 @@
        (t
         (list start (1- end) node))))))
 
-;;; which-func 
-(defconst treesitter-context--rust-which-func-node-types '("function_item" "impl_item" "trait_item" "mod_item" "struct_item" "enum_item")
-  "Node types that which-func cares about.")
-
-(defun treesitter-context--rust-which-func-name (node)
-  (let ((node-type (treesit-node-type node))
-        name-node)
-    (cond
-     ((string-equal node-type "impl_item")
-      (let (trait-node
-            type-node
-            trait
-            type)
-        (setq type-node (treesit-node-child-by-field-name node "type"))
-        (setq trait-node (treesit-node-child-by-field-name node "trait"))
-        (if trait-node
-            (concat
-             (treesit-node-text trait-node t)
-             " for "
-             (treesit-node-text type-node t))
-          (treesit-node-text type-node t))))
-     ((member node-type '("function_item" "trait_item" "mod_item" "struct_item" "enum_item"))
-      (setq name-node (treesit-node-child-by-field-name node "name"))
-      (when name-node
-        (treesit-node-text name-node t)))
-     (t
-      ""))))
-
-(cl-defmethod treesitter-context-which-func-function (&context (major-mode rust-ts-mode))
-  (treesitter-context--which-func-function-base treesitter-context--rust-which-func-node-types #'treesitter-context--rust-which-func-name))
-
 ;;; supported mode
 (add-to-list 'treesitter-context--supported-mode 'rust-ts-mode t)
 (add-to-list 'treesitter-context--fold-supported-mode 'rust-ts-mode t)
 (add-to-list 'treesitter-context--focus-supported-mode 'rust-ts-mode t)
-(add-to-list 'treesitter-context--which-func-supported-mode 'rust-ts-mode t)
 
 (provide 'treesitter-context-rust)

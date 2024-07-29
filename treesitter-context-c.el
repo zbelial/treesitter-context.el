@@ -82,30 +82,9 @@
        (t
         (list start new-end node))))))
 
-;;; which-func
-(defconst treesitter-context--c-which-func-node-types '("function_definition")
-  "Node types that which-func cares about.")
-
-(defun treesitter-context--c-which-func-name (node)
-  (let ((node-type (treesit-node-type node))
-        name-node)
-    (cond
-     ((member node-type '("function_definition"))
-      (when-let ((function-declarator (treesit-search-subtree node
-                                                              (lambda (n) (equal (treesit-node-type n) "function_declarator"))
-                                                              nil t)))
-        (when-let ((declarator (treesit-node-child-by-field-name function-declarator "declarator")))
-          (treesit-node-text declarator t))))
-     (t
-      ""))))
-
-(cl-defmethod treesitter-context-which-func-function (&context (major-mode c-ts-mode))
-  (treesitter-context--which-func-function-base treesitter-context--c-which-func-node-types #'treesitter-context--c-which-func-name))
-
 ;;; supported mode
 (add-to-list 'treesitter-context--supported-mode 'c-ts-mode t)
 (add-to-list 'treesitter-context--fold-supported-mode 'c-ts-mode t)
 (add-to-list 'treesitter-context--focus-supported-mode 'c-ts-mode t)
-(add-to-list 'treesitter-context--which-func-supported-mode 'c-ts-mode t)
 
 (provide 'treesitter-context-c)
