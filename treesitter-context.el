@@ -97,20 +97,74 @@ If nil, show context only when the outmost parent is invisible."
   :safe 'floatp
   :group 'treesitter-context)
 
+(defcustom treesitter-context-frame-position 'top-right
+  "Position of the context frame.
+Can be window-relative positions or a custom poshandler function."
+  :version "29.1"
+  :type '(choice (const :tag "Window Top Right" top-right)
+                 (const :tag "Window Top Left" top-left)
+                 (const :tag "Window Bottom Right" bottom-right)
+                 (const :tag "Window Bottom Left" bottom-left)
+                 (function :tag "Custom poshandler function"))
+  :group 'treesitter-context)
+
+(defcustom treesitter-context-frame-max-width nil
+  "Maximum width of the context frame. If nil, use window width."
+  :version "29.1"
+  :type '(choice (const :tag "No limit" nil)
+                 (integer :tag "Max width"))
+  :group 'treesitter-context)
+
+(defcustom treesitter-context-frame-max-height nil
+  "Maximum height of the context frame. If nil, no limit."
+  :version "29.1"
+  :type '(choice (const :tag "No limit" nil)
+                 (integer :tag "Max height"))
+  :group 'treesitter-context)
+
+(defcustom treesitter-context-frame-padding 2
+  "Padding between line numbers and content."
+  :version "29.1"
+  :type 'integer
+  :safe 'integerp
+  :group 'treesitter-context)
+
+(defcustom treesitter-context-frame-offset-x 0
+  "Horizontal offset from the position anchor point in pixels."
+  :version "29.1"
+  :type 'integer
+  :group 'treesitter-context)
+
+(defcustom treesitter-context-frame-offset-y 0
+  "Vertical offset from the position anchor point in pixels."
+  :version "29.1"
+  :type 'integer
+  :group 'treesitter-context)
+
 (defvar treesitter-context--buffer-name "*treesitter-context*"
   "Name of buffer used to show context.")
 
-(defvar treesitter-context--indent-level 0
+(defcustom treesitter-context--indent-level 0
   "Indent level used to generate context information.")
 
-(defvar treesitter-context-background-color "#000000"
-  "Background color for treesitter-context posframe")
+(defcustom treesitter-context-background-color "#000000"
+  "Background color for treesitter-context posframe."
+  :version "29.1"
+  :type 'color
+  :group 'treesitter-context)
 
-(defvar treesitter-context-border-color "#FFFFFF"
-  "Border color for treesitter-context posframe")
+(defcustom treesitter-context-border-color "#FFFFFF"
+  "Border color for treesitter-context posframe."
+  :version "29.1"
+  :type 'color
+  :group 'treesitter-context)
 
-(defvar treesitter-context-border-width 1
-  "Border width for treesitter-context posframe")
+(defcustom treesitter-context-border-width 1
+  "Border width for treesitter-context posframe."
+  :version "29.1"
+  :type 'integer
+  :safe 'integerp
+  :group 'treesitter-context)
 
 (defvar-local treesitter-context--refresh-timer nil
   "Idle timer for refreshing context.")
@@ -139,6 +193,33 @@ See `posframe-show' for more infor about hidehandler and INFO ."
   (let ((extra (max 0 (- len (length s)))))
     (concat s (make-string extra ?\s))))
 
+(defun treesitter-context--poshandler-with-offset (base-handler)
+  "Wrap a base poshandler to add offset support."
+  (lambda (info)
+    (let* ((base-pos (funcall base-handler info))
+           (offset-x treesitter-context-frame-offset-x)
+           (offset-y treesitter-context-frame-offset-y))
+      (cons (+ (car base-pos) offset-x)
+            (+ (cdr base-pos) offset-y)))))
+
+(defun treesitter-context--get-poshandler ()
+  "Get the appropriate poshandler based on customization."
+  (cond
+   ;; Window-relative positions with offset support
+   ((eq treesitter-context-frame-position 'top-right)
+    (treesitter-context--poshandler-with-offset #'posframe-poshandler-window-top-right-corner))
+   ((eq treesitter-context-frame-position 'top-left)
+    (treesitter-context--poshandler-with-offset #'posframe-poshandler-window-top-left-corner))
+   ((eq treesitter-context-frame-position 'bottom-right)
+    (treesitter-context--poshandler-with-offset #'posframe-poshandler-window-bottom-right-corner))
+   ((eq treesitter-context-frame-position 'bottom-left)
+    (treesitter-context--poshandler-with-offset #'posframe-poshandler-window-bottom-left-corner))
+   ;; Custom function
+   ((functionp treesitter-context-frame-position)
+    treesitter-context-frame-position)
+   ;; Default fallback
+   (t (treesitter-context--poshandler-with-offset #'posframe-poshandler-window-top-right-corner))))
+
 (defun treesitter-context--show-context ()
   "Show context in a child frame."
   (let* ((buffer (get-buffer-create treesitter-context--buffer-name))
@@ -148,7 +229,7 @@ See `posframe-show' for more infor about hidehandler and INFO ."
          (prefix-len 0)
          (line-no-prefix "")
          (blank-prefix "")
-         (padding "  ")
+         (padding (make-string treesitter-context-frame-padding ?\s))
          (font-height (face-attribute 'default :height))
          first-line-p)
     (when treesitter-context-show-line-number
@@ -178,18 +259,22 @@ See `posframe-show' for more infor about hidehandler and INFO ."
                (> treesitter-context-frame-font-fraction 0.0))
       (setq treesitter-context-frame-font nil)
       (setq font-height (round (* font-height treesitter-context-frame-font-fraction))))
-    (setq treesitter-context--child-frame (posframe-show buffer
-                                                         :poshandler #'posframe-poshandler-window-top-right-corner
-                                                         :font treesitter-context-frame-font
-                                                         :border-width treesitter-context-border-width
-                                                         :background-color treesitter-context-background-color
-                                                         :internal-border-color treesitter-context-border-color
-                                                         :internal-border-width treesitter-context-border-width
-                                                         :min-width (min (max treesitter-context-frame-min-width (/ (window-width) 2)) (window-width))
-                                                         :min-height treesitter-context-frame-min-height
-                                                         :accept-focus nil
-                                                         :hidehandler #'treesitter-context--posframe-hidehandler-when-buffer-change
-                                                         :timeout treesitter-context-frame-autohide-timeout))
+    (setq treesitter-context--child-frame
+          (posframe-show buffer
+                         :poshandler (treesitter-context--get-poshandler)
+                         :font treesitter-context-frame-font
+                         :border-width treesitter-context-border-width
+                         :background-color treesitter-context-background-color
+                         :internal-border-color treesitter-context-border-color
+                         :internal-border-width treesitter-context-border-width
+                         :min-width (min (max treesitter-context-frame-min-width (/ (window-width) 2))
+                                         (or treesitter-context-frame-max-width (window-width)))
+                         :max-width treesitter-context-frame-max-width
+                         :min-height treesitter-context-frame-min-height
+                         :max-height treesitter-context-frame-max-height
+                         :accept-focus nil
+                         :hidehandler #'treesitter-context--posframe-hidehandler-when-buffer-change
+                         :timeout treesitter-context-frame-autohide-timeout))
     (when font-height
       (set-face-attribute 'default treesitter-context--child-frame :height font-height)))
   nil)

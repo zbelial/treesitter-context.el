@@ -52,25 +52,61 @@
 
   Be sure your Emacs version is 29.1 and above (built with tree-sitter support), and install the tree-sitter parsers you need.
 
+* Positioning and Appearance
+  The context frame can be positioned at different locations within the current window and customized with offsets for fine-tuning.
+
+** Position Options
+   - ='top-right= (default): Top-right corner of the window
+   - ='top-left=: Top-left corner of the window
+   - ='bottom-right=: Bottom-right corner of the window
+   - ='bottom-left=: Bottom-left corner of the window
+   - Custom function: You can provide your own positioning function
+
+** Examples
+   #+BEGIN_SRC elisp
+     ;; Position at top-left with 20px padding from edges
+     (setq treesitter-context-frame-position 'top-left
+           treesitter-context-frame-offset-x 20
+           treesitter-context-frame-offset-y 20)
+
+     ;; Customize appearance
+     (setq treesitter-context-background-color "#2d3748"
+           treesitter-context-border-color "#4a5568"
+           treesitter-context-border-width 2
+           treesitter-context-frame-padding 3)
+
+     ;; Custom positioning function
+     (setq treesitter-context-frame-position
+           (lambda (info)
+             ;; Position 100px from left, 50px from top of window
+             (cons 100 50)))
+   #+END_SRC
+
 * Customization
-| Variable                                        | Default   | Description                                                                                 |
-|-------------------------------------------------+-----------+---------------------------------------------------------------------------------------------|
-| treesitter-context-idle-time                    | 2.0       | How many seconds to wait before refreshing context information                              |
-| treesitter-context-show-context-always          | t         | Show context all the time if t, if nil only show context when outmost parent is invisible   |
-| treesitter-context-show-line-number             | t         | Show line number in the child frame                                                         |
-| treesitter-context-frame-autohide-timeout       | 15        | Child frame will hide itself after this many seconds                                        |
-| treesitter-context-frame-indent-offset          | 4         | Indent offset in the child frame                                                            |
-| treesitter-context-frame-min-width              | 60        | Minimal width of the child frame                                                            |
-| treesitter-context-frame-min-height             | 5         | Minimal height of the child frame                                                           |
-| treesitter-context-frame-font                   | nil       | Font of the child frame                                                                     |
-| treesitter-context-java-show-modifiers          | nil       | If t, show modifiers of the classes/methods                                                 |
-| treesitter-context-background-color             | "#000000" | Background color of the context frame                                                       |
-| treesitter-context-border-color                 | "#FFFFFF" | Context frame border color                                                                  |
-| treesitter-context-border-width                 | 1         | Context frame border width                                                                  |
-| treesitter-context-fold-ellipsis-content        | "..."     | Text to show in place of a folded block.                                                    |
-| treesitter-context-fold-show-fringe-marks       | t         | Whether to show fold markers in the fringe or not.                                          |
-| treesitter-context-fold-unfold-when-fold-region | nil       | When folding a region, whether unfold old foldings in this region or not.                   |
-| treesitter-context-frame-font-fraction          | nil       | Fraction of font height in the child frame. Prefer this to `treesitter-context-frame-font'. |
+| Variable                                        | Default    | Description                                                                                 |
+|-------------------------------------------------+------------+---------------------------------------------------------------------------------------------|
+| treesitter-context-idle-time                    | 2.0        | How many seconds to wait before refreshing context information                              |
+| treesitter-context-show-context-always          | t          | Show context all the time if t, if nil only show context when outmost parent is invisible   |
+| treesitter-context-show-line-number             | t          | Show line number in the child frame                                                         |
+| treesitter-context-frame-autohide-timeout       | 15         | Child frame will hide itself after this many seconds                                        |
+| treesitter-context-frame-indent-offset          | 4          | Indent offset in the child frame                                                            |
+| treesitter-context-frame-min-width              | 60         | Minimal width of the child frame                                                            |
+| treesitter-context-frame-min-height             | 5          | Minimal height of the child frame                                                           |
+| treesitter-context-frame-font                   | nil        | Font of the child frame                                                                     |
+| treesitter-context-java-show-modifiers          | nil        | If t, show modifiers of the classes/methods                                                 |
+| treesitter-context-background-color             | "#000000"  | Background color of the context frame                                                       |
+| treesitter-context-border-color                 | "#FFFFFF"  | Context frame border color                                                                  |
+| treesitter-context-border-width                 | 1          | Context frame border width                                                                  |
+| treesitter-context-fold-ellipsis-content        | "..."      | Text to show in place of a folded block.                                                    |
+| treesitter-context-fold-show-fringe-marks       | t          | Whether to show fold markers in the fringe or not.                                          |
+| treesitter-context-fold-unfold-when-fold-region | nil        | When folding a region, whether unfold old foldings in this region or not.                   |
+| treesitter-context-frame-font-fraction          | nil        | Fraction of font height in the child frame. Prefer this to `treesitter-context-frame-font'. |
+| treesitter-context-frame-position               | 'top-right | Position of the context frame (top-right, top-left, bottom-right, bottom-left)              |
+| treesitter-context-frame-max-width              | nil        | Maximum width of the context frame. If nil, use window width                                |
+| treesitter-context-frame-max-height             | nil        | Maximum height of the context frame. If nil, no limit                                       |
+| treesitter-context-frame-padding                | 2          | Padding between line numbers and content                                                    |
+| treesitter-context-frame-offset-x               | 0          | Horizontal offset from the position anchor point in pixels                                  |
+| treesitter-context-frame-offset-y               | 0          | Vertical offset from the position anchor point in pixels                                    |
 
 * Commands
 ** treesitter-context-fold-hide
